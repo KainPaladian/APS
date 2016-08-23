@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<ui:composition
+	template="/WEB-INF/templates/templateFuncionalidades.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<ui:define name="titulo">
+	<h:outputText value="#{manterClienteMB.tituloPagina}" />
+	</ui:define>
+	<ui:define name="corpoFuncionalidade">
+		<div class="ui-grid ui-grid-responsive">
+			<div class="ui-grid-row">
+				<div class="ui-grid-col-2">
+					<div class="form-group">
+						<p:outputLabel for="status" value="#{msg['label.status']}" />
+						<div class="form-control">
+							<p:inputSwitch value="#{manterClienteMB.clienteEmEdicao.statusBoolean}"
+								id="status" onLabel="#{msg['label.ativo']}"
+								offLabel="#{msg['label.inativo']}" />
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="ui-grid-row">
+				<div class="ui-grid-col-2">
+					<div class="form-group">
+						<p:outputLabel for="cmbTipoPessoa"
+							value="#{msg['label.tipo.pessoa']}" />
+						<div class="form-control">
+							<p:selectOneMenu id="cmbTipoPessoa" required="true"
+								converter="tipoPessoaConverter"
+								value="#{manterClienteMB.clienteEmEdicao.tipoPessoa}">
+								<f:selectItem itemLabel="#{msg['label.selecione']}" itemValue="" />
+								<f:selectItems value="#{manterClienteMB.tiposPessoas}"
+									var="tipoPessoa" itemLabel="#{msg[tipoPessoa.label]}" />
+							</p:selectOneMenu>
+							<p:message for="cmbTipoPessoa" display="text" showDetail="true" />
+						</div>
+					</div>
+				</div>
+				<div class="ui-grid-col-4">
+					<div class="form-group">
+						<p:outputLabel for="cpfCnpj" value="#{msg['label.cpf.cnpj']}" />
+						<div class="form-control">
+							<p:inputText value="#{manterClienteMB.clienteEmEdicao.cpfCnpj}"
+								maxlength="14" required="true" id="cpfCnpj">
+								<pe:keyFilter regEx="#{msg['regex.digitos']}" />
+								<f:validateLength minimum="11" maximum="14" />
+							</p:inputText>
+							<p:message for="cpfCnpj" display="text" />
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="ui-grid-row">
+				<div class="ui-grid-col-6">
+					<div class="form-group">
+						<p:outputLabel for="nomeRazaoSocial"
+							value="#{msg['label.nome.razao.social']}" />
+						<div class="form-control">
+							<p:inputText value="#{manterClienteMB.clienteEmEdicao.nomeRazaoSocial}"
+								required="true" id="nomeRazaoSocial" maxlength="100" />
+							<p:message for="nomeRazaoSocial" display="text" />
+						</div>
+					</div>
+				</div>
+				<div class="ui-grid-col-6">
+					<div class="form-group">
+						<p:outputLabel for="nomeFantasia"
+							value="#{msg['label.nome.fantasia']}" />
+						<div class="form-control">
+							<p:inputText value="#{manterClienteMB.clienteEmEdicao.nomeFantasia}"
+								maxlength="100" id="nomeFantasia" />
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="ui-grid-row">
+				<div class="ui-grid-col-2">
+					<div class="form-group">
+						<p:outputLabel for="telefone1"
+							value="#{msg['label.telefone.principal']}" />
+						<div class="form-control">
+							<p:inputMask value="#{manterClienteMB.clienteEmEdicao.telefoneFixo1}"
+								mask="#{msg['mask.telefone']}" id="telefone1" />
+						</div>
+					</div>
+				</div>
+				<div class="ui-grid-col-2">
+					<div class="form-group">
+						<p:outputLabel for="telefone2"
+							value="#{msg['label.telefone.secundario']}" />
+						<div class="form-control">
+							<p:inputMask value="#{manterClienteMB.clienteEmEdicao.telefoneFixo2}"
+								id="telefone2" mask="#{msg['mask.telefone']}" />
+						</div>
+					</div>
+				</div>
+				<div class="ui-grid-col-2">
+					<div class="form-group">
+						<p:outputLabel for="fax" value="Fax" />
+						<div class="form-control">
+							<p:inputMask value="#{manterClienteMB.clienteEmEdicao.fax}" id="fax"
+								mask="#{msg['mask.telefone']}" />
+						</div>
+					</div>
+				</div>
+				<div class="ui-grid-col-2">
+					<div class="form-group">
+						<p:outputLabel for="celular1"
+							value="#{msg['label.celular.principal']}" />
+						<div class="form-control">
+							<p:inputMask value="#{manterClienteMB.clienteEmEdicao.celular1}"
+								mask="#{msg['mask.celular']}" id="celular1" />
+						</div>
+					</div>
+				</div>
+				<div class="ui-grid-col-2">
+					<div class="form-group">
+						<p:outputLabel for="celular2"
+							value="#{msg['label.celular.secundario']}" />
+						<div class="form-control">
+							<p:inputMask value="#{manterClienteMB.clienteEmEdicao.celular2}"
+								mask="#{msg['mask.celular']}" id="celular2" />
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<div class="ui-grid-row">
+				<div class="ui-grid-col-4">
+					<div class="form-group">
+						<p:outputLabel for="email" value="E-mail" />
+						<div class="form-control">
+							<p:inputText value="#{manterClienteMB.clienteEmEdicao.email}"
+								id="email" required="false" maxlength="60">
+								<f:validator validatorId="emailValidator" />
+							</p:inputText>
+							<p:message for="email" display="text" />
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="ui-grid-row">
+				<div class="ui-grid-col-2">
+					<div class="form-group">
+						<p:outputLabel for="cepPrincipal" value="#{msg['label.cep']}" />
+						<div class="form-control">
+							<p:inputMask required="true"
+								value="#{manterClienteMB.clienteEmEdicao.enderecoPrincipal.cep}"
+								mask="#{msg['mask.cep']}" maxlength="15" id="cepPrincipal" />
+							<p:message for="cepPrincipal" display="text" />
+						</div>
+					</div>
+				</div>
+				<div class="ui-grid-col-3">
+					<div class="form-group">
+						<p:outputLabel for="cmbUfEnderecoPrincipal"
+							value="#{msg['label.uf']}" />
+						<div class="form-control">
+							<p:selectOneMenu id="cmbUfEnderecoPrincipal" required="true"
+								converter="estadosBrasileirosConverter"
+								value="#{manterClienteMB.clienteEmEdicao.enderecoPrincipal.uf}">
+								<f:selectItem itemLabel="Selecione" itemValue="" />
+								<f:selectItems value="#{manterClienteMB.estadosBrasileiros}" var="uf"
+									itemLabel="#{uf.nome}" />
+							</p:selectOneMenu>
+							<p:message for="cmbUfEnderecoPrincipal" display="text" />
+
+						</div>
+					</div>
+				</div>
+				<div class="ui-grid-col-4">
+					<div class="form-group">
+						<p:outputLabel for="cidadePrincipal"
+							value="#{msg['label.cidade']}" />
+						<div class="form-control">
+							<p:inputText
+								value="#{manterClienteMB.clienteEmEdicao.enderecoPrincipal.cidade}"
+								id="cidadePrincipal" required="true" maxlength="100" />
+							<p:message for="cidadePrincipal" display="text" />
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="ui-grid-row">
+				<div class="ui-grid-col-4">
+					<div class="form-group">
+						<p:outputLabel for="logradouroPrincipal"
+							value="#{msg['label.logradouro']}" />
+						<div class="form-control">
+							<p:inputText required="true"
+								value="#{manterClienteMB.clienteEmEdicao.enderecoPrincipal.logradouro}"
+								id="logradouroPrincipal" maxlength="100" />
+							<p:message for="logradouroPrincipal" display="text" />
+						</div>
+					</div>
+				</div>
+				<div class="ui-grid-col-1">
+					<div class="form-group">
+						<p:outputLabel for="numeroPrincipal"
+							value="#{msg['label.numero']}" />
+						<div class="form-control">
+							<p:inputText required="true" maxlength="10"
+								value="#{manterClienteMB.clienteEmEdicao.enderecoPrincipal.numero}"
+								id="numeroPrincipal">
+								<pe:keyFilter regEx="#{msg['regex.digitos']}" />
+							</p:inputText>
+							<p:message for="numeroPrincipal" display="text" />
+						</div>
+					</div>
+				</div>
+				<div class="ui-grid-col-2">
+					<div class="form-group">
+						<p:outputLabel for="complementoPrincipal"
+							value="#{msg['label.complemento']}" />
+						<div class="form-control">
+							<p:inputText
+								value="#{manterClienteMB.clienteEmEdicao.enderecoPrincipal.complemento}"
+								id="complementoPrincipal" maxlength="50" />
+						</div>
+					</div>
+				</div>
+				<div class="ui-grid-col-4">
+					<div class="form-group">
+						<p:outputLabel for="bairroPrincipal"
+							value="#{msg['label.bairro']}" />
+						<div class="form-control">
+							<p:inputText required="true"
+								value="#{manterClienteMB.clienteEmEdicao.enderecoPrincipal.bairro}"
+								id="bairroPrincipal" maxlength="100" />
+							<p:message for="bairroPrincipal" display="text" />
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</ui:define>
+	<ui:define name="menuInferiorFuncionalidade">
+
+		<f:facet name="left">
+			<p:commandButton value="#{msg['label.voltar']}" id="btnVoltar"
+				icon="fa fa-arrow-left" action="#{manterClienteMB.voltarTelaListar}"
+				ajax="false" immediate="true" />
+			<p:hotkey bind="v" handler="$('#frm\\:btnVoltar').click()" />
+		</f:facet>
+
+		<f:facet name="right">
+			<p:hotkey bind="l" handler="$('#frm\\:btnSalvar').click()" />
+			<p:commandButton value="#{msg['label.salvar']}"
+				action="#{manterClienteMB.salvar}" icon="fa fa-check" id="btnSalvar"
+				styleClass="btnSalvar" update="@form" />
+			<p:hotkey bind="s" action="#{manterClienteMB.salvar}" update="@form" />
+			<p:defaultCommand target="btnSalvar" />
+		</f:facet>
+
+	</ui:define>
+</ui:composition>

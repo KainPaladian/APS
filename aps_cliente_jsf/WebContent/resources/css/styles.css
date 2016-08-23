@@ -1,0 +1,60 @@
+/* Customizacao Prime */
+.ui-datatable .ui-datatable-footer, .ui-datatable .ui-datatable-header {
+	text-align: left !important;
+}
+
+.ui-panel {
+	margin-bottom: 15px !important;
+}
+.ui-widget-overlay{
+	
+}
+/* Geral */
+body {
+	height: 100%;
+	margin: 10px;
+	padding: 0;
+	border: none;
+}
+
+header {
+	text-align: right;
+}
+
+#corpo {
+	padding: 20px;
+}
+
+.float-left {
+	float: left;
+}
+
+.float-right {
+	float: right;
+}
+
+.invisivel{
+	display: none;
+}
+/* Form */
+.form-control>* {
+	width: 100%;
+}
+
+.form-group {
+	margin: 0px 10px 15px 0px;
+	padding: 4px;
+}
+
+/* Menu */
+.menu-inferior-funcionalidades {
+	position: fixed;
+	left: 0px;
+	bottom: 0px;
+	width: 100%;
+}
+
+/* Tabelas*/
+.btnColunas {
+	margin-left: 10px;
+}

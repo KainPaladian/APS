@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<ui:composition
+	template="/WEB-INF/templates/templateFuncionalidades.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<ui:define name="titulo">
+		<h:outputText value="#{manterProdutoMB.tituloPagina}" />
+	</ui:define>
+	<ui:define name="corpoFuncionalidade">
+		<div class="ui-grid ui-grid-responsive">
+			<div class="ui-grid-row">
+				<div class="ui-grid-col-2">
+					<div class="form-group">
+						<p:outputLabel for="status" value="#{msg['label.status']}" />
+						<div class="form-control">
+							<p:inputSwitch value="#{manterProdutoMB.produtoEmEdicao.ativo}"
+								id="status" onLabel="#{msg['label.ativo']}"
+								offLabel="#{msg['label.inativo']}" />
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="ui-grid-row">
+				<div class="ui-grid-col">
+					<p:outputPanel id="panelCmbTipoProduto">
+						<div class="form-group">
+							<p:outputLabel id="labelCmbTipoProduto" for="cmbTipoProduto"
+								value="#{msg['label.tipo.produto']}" />
+							<div class="form-control">
+								<p:selectOneMenu id="cmbTipoProduto"
+									required="#{not empty param[btnSalvar.clientId]}"
+									value="#{manterProdutoMB.tipoProdutoSelecionado}"
+									converter="tipoProdutoConverter">
+									<f:selectItem itemLabel="#{msg['label.selecione']}"
+										noSelectionOption="true" />
+									<f:selectItems value="#{manterProdutoMB.listaTiposProduto}"
+										var="tipoProduto" itemLabel="#{tipoProduto.descricao}"
+										itemValue="#{tipoProduto}" />
+									<p:ajax listener="#{manterProdutoMB.onChangeTipoProduto}"
+										process="@this"
+										update="panelCmbTipoProduto,panelCmbCategoriaProduto, panelMedidas" />
+								</p:selectOneMenu>
+								<p:message id="msgCmbTipoProduto" for="cmbTipoProduto"
+									display="text" showDetail="true" />
+							</div>
+						</div>
+					</p:outputPanel>
+				</div>
+				<div class="ui-grid-col-5">
+					<p:outputPanel id="panelCmbCategoriaProduto">
+						<p:outputPanel
+							rendered="#{manterProdutoMB.tipoProdutoSelecionado ne null}">
+							<div class="form-group">
+								<p:outputLabel for="cmbCategoriaProduto"
+									value="#{msg['label.categoria.produto']}" />
+								<div class="form-control">
+									<p:selectOneMenu id="cmbCategoriaProduto"
+										value="#{manterProdutoMB.produtoEmEdicao.categoriaProduto}"
+										converter="categoriaProdutoConverter"
+										required="#{not empty param[btnSalvar.clientId]}">
+										<f:selectItem itemLabel="#{msg['label.selecione']}"
+											itemValue="0" />
+										<f:selectItems
+											value="#{manterProdutoMB.listaCategoriasProduto}"
+											var="categoriaProduto"
+											itemLabel="#{categoriaProduto.descricao}"
+											itemValue="#{categoriaProduto}" />
+										<p:ajax update="panelMedidas" event="change" process="@this" />
+									</p:selectOneMenu>
+									<p:message for="cmbCategoriaProduto" display="text"
+										showDetail="true" />
+								</div>
+							</div>
+						</p:outputPanel>
+					</p:outputPanel>
+				</div>
+			</div>
+			<p:outputPanel id="panelMedidas">
+				<div class="ui-grid-row">
+					<p:outputPanel styleClass="ui-grid-col-3"
+						rendered="#{manterProdutoMB.produtoEmEdicao.categoriaProduto.usaDiametro}">
+						<div class="form-group">
+							<p:outputLabel for="txtDiametro"
+								value="#{msg['gerenciar.produto.campo.diametro']}" />
+							<div class="form-control">
+								<pe:inputNumber id="txtDiametro" required="true"
+									decimalPlaces="2" maxValue="999.99" emptyValue="empty"
+									value="#{manterProdutoMB.produtoEmEdicao.diametro}"
+									decimalSeparator="#{msg['moeda.separador.decimal']}"
+									thousandSeparator="#{msg['moeda.separador.milhar']}" />
+								<p:message for="txtDiametro" display="text" showDetail="true" />
+							</div>
+						</div>
+					</p:outputPanel>
+					<p:outputPanel styleClass="ui-grid-col-3"
+						rendered="#{manterProdutoMB.produtoEmEdicao.categoriaProduto.usaEspessura}">
+						<div class="form-group">
+							<p:outputLabel for="txtDiametro"
+								value="#{msg['gerenciar.produto.campo.espessura']}" />
+							<div class="form-control">
+								<pe:inputNumber id="txtEspessura" required="true"
+									decimalPlaces="2" maxValue="999.99" emptyValue="empty"
+									value="#{manterProdutoMB.produtoEmEdicao.espessura}"
+									decimalSeparator="#{msg['moeda.separador.decimal']}"
+									thousandSeparator="#{msg['moeda.separador.milhar']}" />
+								<p:message for="txtEspessura" display="text" showDetail="true" />
+							</div>
+						</div>
+					</p:outputPanel>
+					<p:outputPanel styleClass="ui-grid-col-3"
+						rendered="#{manterProdutoMB.produtoEmEdicao.categoriaProduto.usaLargura}">
+						<div class="form-group">
+							<p:outputLabel for="txtLargura"
+								value="#{msg['gerenciar.produto.campo.largura']}" />
+							<div class="form-control">
+								<pe:inputNumber id="txtLargura" required="true"
+									decimalPlaces="2" maxValue="999.99" emptyValue="empty"
+									value="#{manterProdutoMB.produtoEmEdicao.largura}"
+									decimalSeparator="#{msg['moeda.separador.decimal']}"
+									thousandSeparator="#{msg['moeda.separador.milhar']}" />
+								<p:message for="txtLargura" display="text" showDetail="true" />
+							</div>
+						</div>
+					</p:outputPanel>
+					<p:outputPanel styleClass="ui-grid-col-3"
+						rendered="#{manterProdutoMB.produtoEmEdicao.categoriaProduto.usaComprimento}">
+						<div class="form-group">
+							<p:outputLabel for="txtComprimento"
+								value="#{msg['gerenciar.produto.campo.comprimento']}" />
+							<div class="form-control">
+								<pe:inputNumber id="txtComprimento" required="true"
+									decimalPlaces="2" maxValue="999.99" emptyValue="empty"
+									value="#{manterProdutoMB.produtoEmEdicao.comprimento}"
+									decimalSeparator="#{msg['moeda.separador.decimal']}"
+									thousandSeparator="#{msg['moeda.separador.milhar']}" />
+								<p:message for="txtComprimento" display="text" showDetail="true" />
+							</div>
+						</div>
+					</p:outputPanel>
+					<p:outputPanel styleClass="ui-grid-col-3"
+						rendered="#{manterProdutoMB.produtoEmEdicao.categoriaProduto.usaMassa}">
+						<div class="form-group">
+							<p:outputLabel for="txtMassa"
+								value="#{msg['gerenciar.produto.campo.massa']}" />
+							<div class="form-control">
+								<pe:inputNumber id="txtMassa" required="true" decimalPlaces="2"
+									maxValue="999.99" emptyValue="empty"
+									value="#{manterProdutoMB.produtoEmEdicao.massa}"
+									decimalSeparator="#{msg['moeda.separador.decimal']}"
+									thousandSeparator="#{msg['moeda.separador.milhar']}" />
+								<p:message for="txtMassa" display="text" showDetail="true" />
+							</div>
+						</div>
+					</p:outputPanel>
+				</div>
+			</p:outputPanel>
+			<div class="ui-grid-row">
+				<div class="ui-grid-col-6">
+					<div class="form-group">
+						<p:outputLabel for="txtDescricao"
+							value="#{msg['label.descricao']}" />
+						<div class="form-control">
+							<p:inputText id="txtDescricao"
+								value="#{manterProdutoMB.produtoEmEdicao.descricao}"
+								required="true" maxlength="50" />
+							<p:message for="txtDescricao" display="text" showDetail="true" />
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="ui-grid-row">
+				<div class="ui-grid-col-6">
+					<div class="form-group">
+						<p:outputLabel for="txtEspecificao"
+							value="#{msg['label.especificacao']}" />
+						<div class="form-control">
+							<p:inputText id="txtEspecificao"
+								value="#{manterProdutoMB.produtoEmEdicao.especificacao}"
+								required="true" maxlength="50" />
+							<p:message for="txtEspecificao" display="text" showDetail="true" />
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="ui-grid-row">
+				<div class="ui-grid-col-3">
+					<div class="form-group">
+						<p:outputLabel for="txtPreco" value="#{msg['label.preco']}" />
+						<div class="form-control">
+							<pe:inputNumber id="txtPreco" decimalPlaces="2"
+								maxValue="999999.99" emptyValue="empty" required="true"
+								value="#{manterProdutoMB.produtoEmEdicao.preco}"
+								decimalSeparator="#{msg['moeda.separador.decimal']}"
+								thousandSeparator="#{msg['moeda.separador.milhar']}" />
+							<p:message for="txtPreco" display="text" showDetail="true" />
+						</div>
+					</div>
+				</div>
+				<div class="ui-grid-col-2">
+					<div class="form-group">
+						<p:outputLabel for="sucata"
+							value="#{msg['gerenciar.produto.campo.sucata']}" />
+						<div class="form-control">
+							<p:inputSwitch
+								value="#{manterProdutoMB.produtoEmEdicao.sucataBoolean}"
+								id="sucata" onLabel="#{msg['label.sim']}"
+								offLabel="#{msg['label.nao']}" />
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="ui-grid-row">
+				<div class="ui-grid-col-3">
+					<div class="form-group">
+						<p:outputLabel for="permiteDesconto"
+							value="#{msg['gerenciar.produto.campo.permite.desconto']}" />
+						<div class="form-control">
+							<p:inputSwitch
+								value="#{manterProdutoMB.produtoEmEdicao.permiteDesconto}"
+								id="permiteDesconto" onLabel="#{msg['label.sim']}"
+								offLabel="#{msg['label.nao']}">
+								<p:ajax update="panelDescontoMaximo" />
+							</p:inputSwitch>
+						</div>
+					</div>
+				</div>
+				<div class="ui-grid-col-6">
+					<p:outputPanel id="panelDescontoMaximo">
+						<p:outputPanel
+							rendered="#{manterProdutoMB.produtoEmEdicao.permiteDesconto}">
+							<div class="form-group">
+								<p:outputLabel for="txtPercentualMaximoDesconto"
+									value="#{msg['gerenciar.produto.campo.percentual.maximo.desconto']}" />
+								<div class="form-control">
+									<pe:inputNumber id="txtPercentualMaximoDesconto"
+										required="true" decimalPlaces="2" maxValue="99.99"
+										emptyValue="empty"
+										value="#{manterProdutoMB.produtoEmEdicao.percentualMaximoDescontoPagamentoAvistsa}"
+										decimalSeparator="#{msg['moeda.separador.decimal']}"
+										thousandSeparator="#{msg['moeda.separador.milhar']}" />
+									<p:message for="txtPercentualMaximoDesconto" display="text"
+										showDetail="true" />
+								</div>
+							</div>
+						</p:outputPanel>
+					</p:outputPanel>
+				</div>
+			</div>
+		</div>
+	</ui:define>
+	<ui:define name="menuInferiorFuncionalidade">
+		<f:facet name="left">
+			<p:commandButton value="#{msg['label.voltar']}" id="btnVoltar"
+				icon="fa fa-arrow-left" action="#{manterProdutoMB.voltarTelaListar}"
+				ajax="false" immediate="true" />
+			<p:hotkey bind="v" handler="$('#frm\\:btnVoltar').click()" />
+		</f:facet>
+		<f:facet name="right">
+			<p:hotkey bind="l" handler="$('#frm\\:btnSalvar').click()" />
+			<p:commandButton value="#{msg['label.salvar']}"
+				binding="#{btnSalvar}" action="#{manterProdutoMB.salvar}"
+				icon="fa fa-check" id="btnSalvar" styleClass="btnSalvar"
+				update="@form" />
+			<p:hotkey bind="s" action="#{manterProdutoMB.salvar}" update="@form" />
+			<p:defaultCommand target="btnSalvar" />
+		</f:facet>
+	</ui:define>
+</ui:composition>

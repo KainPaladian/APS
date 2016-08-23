@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+<f:event listener="#{manterOrcamentoMB.onPreRenderView}"
+	type="preRenderView" />
+<p:panel>
+	<div class="ui-grid ui-grid-responsive">
+		<p:outputPanel id="panelSelecaoClienteBalcao">
+			<p:outputPanel
+				rendered="#{manterOrcamentoMB.orcamentoEmEdicao.cliente == null}">
+				<div class="ui-grid-row">
+					<div class="ui-grid-col-12">
+						<div class="form-group">
+							<p:outputLabel
+								value="#{msg['manter.orcamento.pergunta.cliente.balcao']}" />
+							<div class="form-control">
+								<p:selectBooleanButton id="btnClienteBalcao"
+									onLabel="#{msg['label.sim']}" offLabel="#{msg['label.nao']}"
+									style="width:100px" value="#{manterOrcamentoMB.clienteBalcao}"
+									valueChangeListener="#{manterOrcamentoMB.onValueChangeListenerClienteBalcao}">
+									<p:ajax event="change"
+										update="panelSelecaoCliente, panelInfoClienteBalcao"
+										process="@this" />
+								</p:selectBooleanButton>
+							</div>
+						</div>
+					</div>
+				</div>
+			</p:outputPanel>
+		</p:outputPanel>
+		<p:outputPanel id="panelInfoClienteBalcao">
+			<p:panel rendered="#{manterOrcamentoMB.clienteBalcao}"
+				header="#{msg['manter.orcamento.label.cliente.balcao.informacoes']}">
+				<div class="ui-grid ui-grid-responsive">
+					<div class="ui-grid-row">
+						<div class="ui-grid-col-2">
+							<div class="form-group">
+								<p:outputLabel for="cmbTipoPessoa_cliente_balcao"
+									value="#{msg['label.tipo.pessoa']}" />
+								<div class="form-control">
+									<p:selectOneMenu id="cmbTipoPessoa_cliente_balcao"
+										required="true" converter="tipoPessoaConverter"
+										value="#{manterOrcamentoMB.orcamentoEmEdicao.clienteBalcao.tipoPessoa}">
+										<f:selectItem itemLabel="#{msg['label.selecione']}"
+											itemValue="" />
+										<f:selectItems value="#{manterOrcamentoMB.tiposPessoas}"
+											var="tipoPessoa" itemLabel="#{msg[tipoPessoa.label]}" />
+									</p:selectOneMenu>
+									<p:message for="cmbTipoPessoa_cliente_balcao" display="text"
+										showDetail="true" />
+								</div>
+							</div>
+						</div>
+						<div class="ui-grid-col-4">
+							<div class="form-group">
+								<p:outputLabel for="cpfCnpj_cliente_balcao"
+									value="#{msg['label.cpf.cnpj']}" />
+								<div class="form-control">
+									<p:inputText
+										value="#{manterOrcamentoMB.orcamentoEmEdicao.clienteBalcao.cpfCnpj}"
+										maxlength="14" required="true" id="cpfCnpj_cliente_balcao">
+										<pe:keyFilter regEx="#{msg['regex.digitos']}" />
+										<f:validateLength minimum="11" maximum="14" />
+									</p:inputText>
+									<p:message for="cpfCnpj_cliente_balcao" display="text" />
+								</div>
+							</div>
+						</div>
+						<div class="ui-grid-col-6">
+							<div class="form-group">
+								<p:outputLabel for="nomeRazaoSocial_cliente_balcao"
+									value="#{msg['label.nome.razao.social']}" />
+								<div class="form-control">
+									<p:inputText
+										value="#{manterOrcamentoMB.orcamentoEmEdicao.clienteBalcao.nomeRazaoSocial}"
+										required="true" id="nomeRazaoSocial_cliente_balcao"
+										maxlength="100" />
+									<p:message for="nomeRazaoSocial_cliente_balcao" display="text" />
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="ui-grid-row">
+						<div class="ui-grid-col-2">
+							<div class="form-group">
+								<p:outputLabel for="telefone_cliente_balco"
+									value="#{msg['label.telefone.principal']}" />
+								<div class="form-control">
+									<p:inputMask
+										value="#{manterOrcamentoMB.orcamentoEmEdicao.clienteBalcao.telefone}"
+										mask="#{msg['mask.telefone']}" id="telefone_cliente_balco" />
+								</div>
+							</div>
+						</div>
+						<div class="ui-grid-col-2">
+							<div class="form-group">
+								<p:outputLabel for="celular_cliente_balco"
+									value="#{msg['label.celular.principal']}" />
+								<div class="form-control">
+									<p:inputMask
+										value="#{manterOrcamentoMB.orcamentoEmEdicao.clienteBalcao.celular}"
+										mask="#{msg['mask.celular']}" id="celular_cliente_balco" />
+								</div>
+							</div>
+						</div>
+						<div class="ui-grid-col-4">
+							<div class="form-group">
+								<p:outputLabel for="email_cliente_balcao" value="E-mail" />
+								<div class="form-control">
+									<p:inputText
+										value="#{manterOrcamentoMB.orcamentoEmEdicao.clienteBalcao.email}"
+										id="email_cliente_balcao" required="false" maxlength="60">
+										<f:validator validatorId="emailValidator" />
+									</p:inputText>
+									<p:message for="email_cliente_balcao" display="text" />
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="ui-grid-row">
+						<div class="ui-grid-col-2">
+							<div class="form-group">
+								<p:outputLabel for="cep_cliente_balcao"
+									value="#{msg['label.cep']}" />
+								<div class="form-control">
+									<p:inputMask
+										value="#{manterOrcamentoMB.orcamentoEmEdicao.clienteBalcao.cep}"
+										mask="#{msg['mask.cep']}" maxlength="15"
+										id="cep_cliente_balcao" />
+								</div>
+							</div>
+						</div>
+						<div class="ui-grid-col-2">
+							<div class="form-group">
+								<p:outputLabel for="cmbUfEndereco_cliente_balcao"
+									value="#{msg['label.uf']}" />
+								<div class="form-control">
+									<p:selectOneMenu id="cmbUfEndereco_cliente_balcao"
+										converter="estadosBrasileirosConverter"
+										value="#{manterOrcamentoMB.orcamentoEmEdicao.clienteBalcao.uf}">
+										<f:selectItem itemLabel="Selecione" itemValue="" />
+										<f:selectItems value="#{manterOrcamentoMB.estadosBrasileiros}"
+											var="uf" itemLabel="#{uf.nome}" />
+									</p:selectOneMenu>
+								</div>
+							</div>
+						</div>
+						<div class="ui-grid-col-4">
+							<div class="form-group">
+								<p:outputLabel for="cidade_cliente_balcao"
+									value="#{msg['label.cidade']}" />
+								<div class="form-control">
+									<p:inputText
+										value="#{manterOrcamentoMB.orcamentoEmEdicao.clienteBalcao.cidade}"
+										id="cidade_cliente_balcao" maxlength="100" />
+								</div>
+							</div>
+						</div>
+						<div class="ui-grid-col-4">
+							<div class="form-group">
+								<p:outputLabel for="logradouro_cliente_balcao"
+									value="#{msg['label.logradouro']}" />
+								<div class="form-control">
+									<p:inputText
+										value="#{manterOrcamentoMB.orcamentoEmEdicao.clienteBalcao.logradouro}"
+										id="logradouro_cliente_balcao" maxlength="100" />
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="ui-grid-row">
+						<div class="ui-grid-col-1">
+							<div class="form-group">
+								<p:outputLabel for="numero_cliente_balcao"
+									value="#{msg['label.numero']}" />
+								<div class="form-control">
+									<p:inputText maxlength="10"
+										value="#{manterOrcamentoMB.orcamentoEmEdicao.clienteBalcao.numero}"
+										id="numero_cliente_balcao">
+										<pe:keyFilter regEx="#{msg['regex.digitos']}" />
+									</p:inputText>
+								</div>
+							</div>
+						</div>
+						<div class="ui-grid-col-2">
+							<div class="form-group">
+								<p:outputLabel for="complemento_cliente_balcao"
+									value="#{msg['label.complemento']}" />
+								<div class="form-control">
+									<p:inputText
+										value="#{manterOrcamentoMB.orcamentoEmEdicao.clienteBalcao.complemento}"
+										id="complemento_cliente_balcao" maxlength="50" />
+								</div>
+							</div>
+						</div>
+						<div class="ui-grid-col-4">
+							<div class="form-group">
+								<p:outputLabel for="bairro_cliente_balcao"
+									value="#{msg['label.bairro']}" />
+								<div class="form-control">
+									<p:inputText
+										value="#{manterOrcamentoMB.orcamentoEmEdicao.clienteBalcao.bairro}"
+										id="bairro_cliente_balcao" maxlength="100" />
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</p:panel>
+		</p:outputPanel>
+		<p:outputPanel id="panelSelecaoCliente">
+			<p:outputPanel
+				rendered="#{!manterOrcamentoMB.clienteBalcao and manterOrcamentoMB.clienteSelecionado eq null}">
+				<div class="ui-grid-row">
+					<div class="ui-grid-col-12">
+						<div class="form-group">
+							<p:outputLabel
+								value="#{msg['manter.orcamento.informacao.selecione.cliente']}" />
+							<div class="form-control">
+								<p:commandButton value="#{msg['label.selecione']}" ajax="true"
+									action="#{manterOrcamentoMB.clickBotaoSelecionarCliente}"
+									style="width:120px" />
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</p:outputPanel>
+			<p:panel
+				header="#{msg['manter.orcamento.label.cliente.selecionado']}"
+				rendered="#{manterOrcamentoMB.clienteSelecionado ne null}">
+				<f:facet name="actions">
+					<p:commandButton icon="fa fa-fw fa-remove"
+						id="btnExcluirClienteSelecionado"
+						actionListener="#{manterOrcamentoMB.removerClienteSelecionado}"
+						process="@this" update="panelSelecaoCliente,panelSelecaoClienteBalcao">
+						<p:confirm header="#{msg['alerta.confirmacao.titulo']}"
+							message="#{msg['manter.orcamento.msg.deseja.remover.cliente.selecionado']}"
+							icon="ui-icon-alert" />
+					</p:commandButton>
+				</f:facet>
+				<div class="ui-grid ui-grid-responsive">
+					<div class="ui-grid-row">
+						<div class="ui-grid-col-2">
+							<div class="form-group">
+								<p:outputLabel for="status" value="#{msg['label.status']}" />
+								<div class="form-control">
+									<p:outputLabel
+										value="#{msg[manterOrcamentoMB.clienteSelecionado.status.label]}"
+										id="status" />
+								</div>
+							</div>
+						</div>
+						<div class="ui-grid-col-2">
+							<div class="form-group">
+								<p:outputLabel for="cmbTipoPessoa"
+									value="#{msg['label.tipo.pessoa']}" />
+								<div class="form-control">
+									<p:outputLabel id="cmbTipoPessoa"
+										value="#{msg[manterOrcamentoMB.clienteSelecionado.tipoPessoa.label]}" />
+								</div>
+							</div>
+						</div>
+						<div class="ui-grid-col-2">
+							<div class="form-group">
+								<p:outputLabel for="cpfCnpj" value="#{msg['label.cpf.cnpj']}" />
+								<div class="form-control">
+									<p:outputLabel
+										value="#{manterOrcamentoMB.clienteSelecionado.cpfCnpj}"
+										id="cpfCnpj" />
+								</div>
+							</div>
+						</div>
+						<div class="ui-grid-col-6">
+							<div class="form-group">
+								<p:outputLabel for="nomeRazaoSocial"
+									value="#{msg['label.nome.razao.social']}" />
+								<div class="form-control">
+									<p:outputLabel id="nomeRazaoSocial"
+										value="#{manterOrcamentoMB.clienteSelecionado.nomeRazaoSocial}" />
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="ui-grid-row">
+						<p:outputPanel class="ui-grid-col-6"
+							rendered="#{not empty manterOrcamentoMB.clienteSelecionado.nomeFantasia}">
+							<div class="form-group">
+								<p:outputLabel for="nomeFantasia"
+									value="#{msg['label.nome.fantasia']}" />
+								<div class="form-control">
+									<p:outputLabel id="nomeFantasia"
+										value="#{manterOrcamentoMB.clienteSelecionado.nomeFantasia}" />
+								</div>
+							</div>
+						</p:outputPanel>
+						<p:outputPanel class="ui-grid-col-6"
+							rendered="#{not empty manterOrcamentoMB.clienteSelecionado.email}">
+							<div class="form-group">
+								<p:outputLabel for="email" value="E-mail" />
+								<div class="form-control">
+									<p:outputLabel
+										value="#{manterOrcamentoMB.clienteSelecionado.email}"
+										id="email" />
+								</div>
+							</div>
+						</p:outputPanel>
+					</div>
+					<div class="ui-grid-row">
+						<p:outputPanel class="ui-grid-col-2"
+							rendered="#{not empty manterOrcamentoMB.clienteSelecionado.telefoneFixo1}">
+							<div class="form-group">
+								<p:outputLabel for="telefone1"
+									value="#{msg['label.telefone.principal']}" />
+								<div class="form-control">
+									<p:outputLabel id="telefone1"
+										value="#{manterOrcamentoMB.clienteSelecionado.telefoneFixo1}" />
+								</div>
+							</div>
+						</p:outputPanel>
+						<p:outputPanel class="ui-grid-col-2"
+							rendered="#{manterOrcamentoMB.clienteSelecionado.telefoneFixo2}">
+							<div class="form-group">
+								<p:outputLabel for="telefone2"
+									value="#{msg['label.telefone.secundario']}" />
+								<div class="form-control">
+									<p:outputLabel id="telefone2"
+										value="#{manterOrcamentoMB.clienteSelecionado.telefoneFixo2}" />
+								</div>
+							</div>
+						</p:outputPanel>
+						<p:outputPanel class="ui-grid-col-2"
+							rendered="#{not empty manterOrcamentoMB.clienteSelecionado.fax}">
+							<div class="form-group">
+								<p:outputLabel for="fax" value="Fax" />
+								<div class="form-control">
+									<p:outputLabel
+										value="#{manterOrcamentoMB.clienteSelecionado.fax}" id="fax" />
+								</div>
+							</div>
+						</p:outputPanel>
+						<p:outputPanel class="ui-grid-col-2"
+							rendered="#{not empty manterOrcamentoMB.clienteSelecionado.celular1}">
+							<div class="form-group">
+								<p:outputLabel for="celular1"
+									value="#{msg['label.celular.principal']}" />
+								<div class="form-control">
+									<p:outputLabel
+										value="#{manterOrcamentoMB.clienteSelecionado.celular1}"
+										id="celular1" />
+								</div>
+							</div>
+						</p:outputPanel>
+						<p:outputPanel class="ui-grid-col-2"
+							rendered="#{not empty manterOrcamentoMB.clienteSelecionado.celular2}">
+							<div class="form-group">
+								<p:outputLabel for="celular2"
+									value="#{msg['label.celular.secundario']}" />
+								<div class="form-control">
+									<p:outputLabel
+										value="#{manterOrcamentoMB.clienteSelecionado.celular2}"
+										id="celular2" />
+								</div>
+							</div>
+						</p:outputPanel>
+					</div>
+					<div class="ui-grid-row">
+						<p:outputPanel class="ui-grid-col-2"
+							rendered="#{not empty manterOrcamentoMB.clienteSelecionado.enderecoPrincipal.cep}">
+							<div class="form-group">
+								<p:outputLabel for="cepPrincipal" value="#{msg['label.cep']}" />
+								<div class="form-control">
+									<p:outputLabel
+										value="#{manterOrcamentoMB.clienteSelecionado.enderecoPrincipal.cep}"
+										id="cepPrincipal" />
+								</div>
+							</div>
+						</p:outputPanel>
+						<p:outputPanel class="ui-grid-col-2"
+							rendered="#{not empty manterOrcamentoMB.clienteSelecionado.enderecoPrincipal.uf}">
+							<div class="form-group">
+								<p:outputLabel for="cmbUfEnderecoPrincipal"
+									value="#{msg['label.uf']}" />
+								<div class="form-control">
+									<p:outputLabel id="cmbUfEnderecoPrincipal"
+										value="#{manterOrcamentoMB.clienteSelecionado.enderecoPrincipal.uf}" />
+								</div>
+							</div>
+						</p:outputPanel>
+						<div class="ui-grid-col-4">
+							<div class="form-group">
+								<p:outputLabel for="cidadePrincipal"
+									value="#{msg['label.cidade']}" />
+								<div class="form-control">
+									<p:outputLabel
+										value="#{manterOrcamentoMB.clienteSelecionado.enderecoPrincipal.cidade}"
+										id="cidadePrincipal" />
+								</div>
+							</div>
+						</div>
+						<div class="ui-grid-col-4">
+							<div class="form-group">
+								<p:outputLabel for="logradouroPrincipal"
+									value="#{msg['label.logradouro']}" />
+								<div class="form-control">
+									<p:outputLabel
+										value="#{manterOrcamentoMB.clienteSelecionado.enderecoPrincipal.logradouro}"
+										id="logradouroPrincipal" />
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="ui-grid-row">
+						<div class="ui-grid-col-2">
+							<div class="form-group">
+								<p:outputLabel for="numeroPrincipal"
+									value="#{msg['label.numero']}" />
+								<div class="form-control">
+									<p:outputLabel
+										value="#{manterOrcamentoMB.clienteSelecionado.enderecoPrincipal.numero}"
+										id="numeroPrincipal" />
+								</div>
+							</div>
+						</div>
+						<p:outputPanel class="ui-grid-col-2"
+							rendered="#{not empty manterOrcamentoMB.clienteSelecionado.enderecoPrincipal.complemento}">
+							<div class="form-group">
+								<p:outputLabel for="complementoPrincipal"
+									value="#{msg['label.complemento']}" />
+								<div class="form-control">
+									<p:outputLabel
+										value="#{manterOrcamentoMB.clienteSelecionado.enderecoPrincipal.complemento}"
+										id="complementoPrincipal" />
+								</div>
+							</div>
+						</p:outputPanel>
+						<div class="ui-grid-col-4">
+							<div class="form-group">
+								<p:outputLabel for="bairroPrincipal"
+									value="#{msg['label.bairro']}" />
+								<div class="form-control">
+									<p:outputLabel
+										value="#{manterOrcamentoMB.clienteSelecionado.enderecoPrincipal.bairro}"
+										id="bairroPrincipal" />
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</p:panel>
+		</p:outputPanel>
+	</div>
+</p:panel>
+</html>

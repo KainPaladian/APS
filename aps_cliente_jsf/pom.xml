@@ -1,0 +1,99 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>br.com.aps</groupId>
+		<version>0.0.1-SNAPSHOT</version>
+		<artifactId>aps</artifactId>
+		<relativePath>../aps/pom.xml</relativePath>
+	</parent>
+	<artifactId>aps_cliente_jsf</artifactId>
+	<packaging>war</packaging>
+	<repositories>
+		<repository>
+			<id>prime-repo</id>
+			<name>PrimeFaces Maven Repository</name>
+			<url>http://repository.primefaces.org</url>
+			<layout>default</layout>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>maven.java.net</id>
+			<name>Java.net Maven2 Repository</name>
+			<url>http://download.java.net/maven/2</url>
+		</pluginRepository>
+	</pluginRepositories>
+	<build>
+		<sourceDirectory>src</sourceDirectory>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<configuration>
+					<webXml>WebContent\WEB-INF\web.xml</webXml>
+					<warSourceDirectory>WebContent</warSourceDirectory>
+					<failOnMissingWebXml>true</failOnMissingWebXml>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<dependencies>
+		<!-- INÍCIO - COMMONS -->
+		<dependency>
+			<groupId>br.com.aps</groupId>
+			<artifactId>aps_commons</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<!-- FIM - COMMONS -->
+		<!-- INÍCIO - ENTIDADES -->
+		<dependency>
+			<groupId>br.com.aps</groupId>
+			<artifactId>aps_entidade</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<!-- FIM - ENTIDADES -->
+		<!-- INÍCIO - SERVICO -->
+		<dependency>
+			<groupId>br.com.aps</groupId>
+			<artifactId>aps_servico</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<!-- FIM - SERVICO -->
+		<!-- INÍCIO JSF -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.faces</groupId>
+			<artifactId>javax.faces-api</artifactId>
+			<version>2.2</version>
+			<scope>compile</scope>
+		</dependency>
+		<!-- FIM JSF -->
+		<!-- INÍCIO PRIMEFACES -->
+		<dependency>
+			<groupId>org.primefaces</groupId>
+			<artifactId>primefaces</artifactId>
+			<version>5.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.primefaces.themes</groupId>
+			<artifactId>cupertino</artifactId>
+			<version>1.0.10</version>
+		</dependency>
+		<dependency>
+			<groupId>org.primefaces.themes</groupId>
+			<artifactId>all-themes</artifactId>
+			<version>1.0.10</version>
+		</dependency>
+		<dependency>
+			<groupId>org.primefaces.extensions</groupId>
+			<artifactId>primefaces-extensions</artifactId>
+			<version>4.0.0</version>
+		</dependency>
+		<!-- INÍCIO PRIMEFACES -->
+	</dependencies>
+</project>

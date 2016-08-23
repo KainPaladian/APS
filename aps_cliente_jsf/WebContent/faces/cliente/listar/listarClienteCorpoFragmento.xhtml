@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<pe:importConstants
+		className="br.com.aps.cliente.jsf.util.ViewConstantes"
+		var="ViewConstantes" />
+	<div class="ui-grid ui-grid-responsive">
+		<div class="ui-grid-row">
+			<div class="ui-grid-col-12">
+				<p:panel id="filtro" header="Filtros" toggleable="true"
+					collapsed="false" closable="false" toggleSpeed="500"
+					closeSpeed="500" widgetVar="panel">
+					<div class="ui-grid ui-grid-responsive">
+						<div class="ui-grid-row">
+							<div class="ui-grid-col-1">
+								<div class="form-group">
+									<p:outputLabel value="#{msg['label.codigo']}" />
+									<div class="form-control">
+										<p:inputText value="#{manterClienteMB.clienteModeloFiltro.id}"
+											id="codigoFiltro" maxlength="9" tabindex="1">
+											<pe:keyFilter regEx="#{msg['regex.digitos']}" />
+										</p:inputText>
+									</div>
+								</div>
+							</div>
+							<div class="ui-grid-col-2">
+								<div class="form-group">
+									<p:outputLabel for="cmbTipoPessoa"
+										value="#{msg['label.tipo.pessoa']}" />
+									<div class="form-control">
+										<p:selectOneMenu id="cmbTipoPessoa"
+											converter="tipoPessoaConverter" tabindex="2"
+											value="#{manterClienteMB.clienteModeloFiltro.tipoPessoa}">
+											<f:selectItem itemLabel="#{msg['label.todos']}" itemValue="" />
+											<f:selectItems value="#{manterClienteMB.tiposPessoas}"
+												var="tipoPessoa" itemLabel="#{msg[tipoPessoa.label]	}" />
+										</p:selectOneMenu>
+									</div>
+								</div>
+							</div>
+							<div class="ui-grid-col-1">
+								<div class="form-group">
+									<p:outputLabel for="cmbStatus" value="#{msg['label.status']}" />
+									<div class="form-control">
+										<p:selectOneMenu id="cmbStatus" converter="statusConverter"
+											tabindex="3"
+											value="#{manterClienteMB.clienteModeloFiltro.status}">
+											<f:selectItem itemLabel="#{msg['label.todos']}" itemValue="" />
+											<f:selectItems value="#{manterClienteMB.status}" var="status"
+												itemLabel="#{msg[status.label]}" />
+										</p:selectOneMenu>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="ui-grid-row">
+							<div class="ui-grid-col-6">
+								<div class="form-group">
+									<p:outputLabel for="nomeRazaoSocial"
+										value="#{msg['label.nome.razao.social']}" />
+									<div class="form-control">
+										<p:inputText tabindex="4"
+											value="#{manterClienteMB.clienteModeloFiltro.nomeRazaoSocial}"
+											id="nomeRazaoSocial" maxlength="100" />
+									</div>
+								</div>
+							</div>
+							<div class="ui-grid-col-4">
+								<div class="form-group">
+									<p:outputLabel for="cpfCnpj" value="#{msg['label.cpf.cnpj']}" />
+									<div class="form-control">
+										<p:inputText
+											value="#{manterClienteMB.clienteModeloFiltro.cpfCnpj}"
+											tabindex="5" maxlength="14" id="cpfCnpj">
+											<pe:keyFilter regEx="#{msg['regex.digitos']}" />
+										</p:inputText>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="ui-grid-row">
+							<div class="ui-grid-col-2">
+								<div class="form-group">
+									<p:outputLabel for="telefone1"
+										value="#{msg['label.telefone.principal']}" />
+									<div class="form-control">
+										<p:inputMask tabindex="6"
+											value="#{manterClienteMB.clienteModeloFiltro.telefoneFixo1}"
+											mask="#{msg['mask.telefone']}" id="telefone1">
+										</p:inputMask>
+									</div>
+								</div>
+							</div>
+							<div class="ui-grid-col-2">
+								<div class="form-group">
+									<p:outputLabel for="celular1"
+										value="#{msg['label.celular.principal']}" />
+									<div class="form-control">
+										<p:inputMask tabindex="7"
+											value="#{manterClienteMB.clienteModeloFiltro.celular1}"
+											mask="#{msg['mask.celular']}" id="celular1">
+										</p:inputMask>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</p:panel>
+			</div>
+		</div>
+		<p:dataTable id="listaClientes" var="cliente" paginator="true"
+			rows="#{ViewConstantes.DATA_TABLE_REGISTROS_POR_PAGINA}"
+			paginatorAlwaysVisible="false"
+			pageLinks="#{ViewConstantes.DATA_TABLE_PAGE_LINKS}"
+			selectionMode="single" rowKey="#{cliente.id}"
+			selection="#{manterClienteMB.clienteEmEdicao}" emptyMessage=""
+			resizableColumns="true" value="#{manterClienteMB.listaClientes}"
+			sortMode="multiple">
+			<p:ajax event="rowDblselect"
+				disabled="#{manterClienteMB.outcome ne null}"
+				onstart="$('#frm\\:btnEditar').click();" />
+			<p:ajax event="rowDblselect"
+				disabled="#{manterClienteMB.outcome eq null}"
+				onstart="$('#frm\\:btnSelecionar').click();" />
+			<f:facet name="header">
+				<p:outputLabel value="Clientes" />
+				<p:commandButton id="toggler" type="button"
+					icon="ui-icon-calculator" styleClass="btnColunas" />
+				<p:columnToggler datasource="listaClientes" trigger="toggler" />
+			</f:facet>
+			<p:column headerText="Cod." sortBy="#{cliente.id}" width="5%"
+				priority="2">
+				<h:outputText value="#{cliente.id}" />
+			</p:column>
+			<p:column headerText="Tipo" sortBy="#{cliente.tipoPessoa}" width="5%">
+				<h:outputText value="#{cliente.tipoPessoa}" />
+			</p:column>
+			<p:column headerText="#{msg['label.cpf.cnpj']}"
+				sortBy="#{cliente.cpfCnpj}" >
+				<h:outputText value="#{cliente.cpfCnpj}" />
+			</p:column>
+			<p:column headerText="#{msg['label.nome.razao.social']}" priority="1"
+				width="30%" sortBy="#{cliente.nomeRazaoSocial}">
+				<h:outputText value="#{cliente.nomeRazaoSocial}" />
+			</p:column>
+			<p:column headerText="#{msg['label.telefone.principal']}"
+				sortBy="#{cliente.telefoneFixo1}">
+				<h:outputText value="#{cliente.telefoneFixo1}" />
+			</p:column>
+			<p:column headerText="#{msg['label.celular.principal']}"
+				sortBy="#{cliente.celular1}">
+				<h:outputText value="#{cliente.celular1}" />
+			</p:column>
+			<p:column headerText="#{msg['label.status']}"
+				sortBy="#{cliente.status}" width="7%">
+				<h:outputText value="#{msg[cliente.status.label]}" />
+			</p:column>
+		</p:dataTable>
+	</div>
+</ui:composition>

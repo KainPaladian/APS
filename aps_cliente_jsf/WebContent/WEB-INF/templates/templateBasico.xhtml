@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title><ui:insert name="titulo">#{msg['label.titulo.sistema']}</ui:insert>
+	</title>
+	<h:outputStylesheet name="css/styles.css" />
+	<h:outputScript name="js/customPrimeFaces.js" />
+	<h:outputScript name="js/app.js" />
+</h:head>
+<h:body>
+	<header>
+		<!--<p:panel>
+			#{msg['label.titulo.sistema']}
+		</p:panel>-->
+	</header>
+	<div id="conteudo">
+		<h:form>
+			<ui:include src="menuPrincipalAplicacao.xhtml" />
+		</h:form>
+		<div id="corpo">
+			<ui:include src="elementosComunsTemplates.xhtml" />
+			<p:panel id="panel">
+				<h:form id="frm">
+					<ui:insert name="corpo" />
+				</h:form>
+			</p:panel>
+		</div>
+	</div>
+	<footer></footer>
+</h:body>
+</html>
