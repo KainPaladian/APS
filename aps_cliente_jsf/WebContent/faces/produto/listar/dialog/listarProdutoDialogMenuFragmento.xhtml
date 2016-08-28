@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<f:facet name="left">
+		<p:commandButton action="#{manterProdutoMB.clickBotaoPesquisar}"
+			process="filtro,@this" update="listaProdutos" id="btnPesquisar"
+			icon="fa fa-search" value="#{msg['label.pesquisar']}" />
+		<p:hotkey bind="p" handler="$('#frm\\:btnPesquisar').click()"
+			id="hotKeyPesquisar" />
+		<p:defaultCommand target="btnPesquisar" />
+		<p:commandButton id="btnSelecionar"
+			action="#{manterProdutoMB.clickBotaoSelecionar}" icon="fa fa-check"
+			value="#{msg['label.selecionar']}" ajax="true" />
+		<p:hotkey bind="s" handler="$('#frm\\:btnSelecionar').click()"
+			id="hotKeySelecionar" />
+	</f:facet>
+	<f:facet name="right">
+		<p:commandButton value="#{msg['label.voltar']}" id="btnVoltar"
+			icon="fa fa-arrow-left"
+			action="#{manterProdutoMB.clickBotaoVoltarSelecaoProduto}"
+			ajax="true" immediate="true" />
+		<p:hotkey bind="v" handler="$('#frm\\:btnVoltar').click()" />
+		<p:commandButton actionListener="#{manterProdutoMB.clickBotaoLimpar}"
+			process="@this" update="listaProdutos,filtro" id="btnLimpar"
+			icon="fa fa-trash-o" value="#{msg['label.limpar']}" />
+		<p:hotkey bind="l" handler="$('#frm\\:btnLimpar').click()"
+			id="hotKeyLimpar" />
+	</f:facet>
+</ui:composition>

@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<pe:importConstants
+		className="br.com.aps.cliente.jsf.util.ViewConstantes"
+		var="ViewConstantes" />
+	<div class="ui-grid ui-grid-responsive">
+		<div class="ui-grid-row">
+			<div class="ui-grid-col-12">
+				<p:panel id="filtro" header="Filtros" toggleable="true"
+					collapsed="false" closable="false" toggleSpeed="500"
+					closeSpeed="500" widgetVar="panel">
+					<div class="ui-grid ui-grid-responsive">
+						<div class="ui-grid-row">
+							<div class="ui-grid-col-1">
+								<div class="form-group">
+									<p:outputLabel value="#{msg['label.codigo']}" />
+									<div class="form-control">
+										<p:inputText value="#{manterProdutoMB.produtoModeloFiltro.id}"
+											id="codigoFiltro" maxlength="9" tabindex="1">
+											<pe:keyFilter regEx="#{msg['regex.digitos']}" />
+										</p:inputText>
+									</div>
+								</div>
+							</div>
+							<div class="ui-grid-col">
+								<div class="form-group">
+									<p:outputLabel id="labelCmbTipoProduto" for="cmbTipoProduto"
+										value="#{msg['label.tipo.produto']}" />
+									<div class="form-control">
+										<p:selectOneMenu id="cmbTipoProduto"
+											value="#{manterProdutoMB.tipoProdutoSelecionado}"
+											converter="tipoProdutoConverter">
+											<f:selectItem itemLabel="#{msg['label.todos']}"
+												noSelectionOption="true" />
+											<f:selectItems value="#{manterProdutoMB.listaTiposProduto}"
+												var="tipoProduto" itemLabel="#{tipoProduto.descricao}"
+												itemValue="#{tipoProduto}" />
+											<p:ajax listener="#{manterProdutoMB.onChangeTipoProduto}"
+												process="@this" event="change"
+												update="panelCmbCategoriaProduto" />
+										</p:selectOneMenu>
+									</div>
+								</div>
+							</div>
+							<div class="ui-grid-col-5">
+								<p:outputPanel id="panelCmbCategoriaProduto">
+									<p:outputPanel
+										rendered="#{manterProdutoMB.tipoProdutoSelecionado ne null}">
+										<div class="form-group">
+											<p:outputLabel for="cmbCategoriaProduto"
+												value="#{msg['label.categoria.produto']}" />
+											<div class="form-control">
+												<p:selectOneMenu id="cmbCategoriaProduto"
+													value="#{manterProdutoMB.produtoModeloFiltro.categoriaProduto}"
+													converter="categoriaProdutoConverter">
+													<f:selectItem itemLabel="#{msg['label.todos']}"
+														itemValue="0" />
+													<f:selectItems
+														value="#{manterProdutoMB.listaCategoriasProduto}"
+														var="categoriaProduto"
+														itemLabel="#{categoriaProduto.descricao}"
+														itemValue="#{categoriaProduto}" />
+												</p:selectOneMenu>
+											</div>
+										</div>
+									</p:outputPanel>
+								</p:outputPanel>
+							</div>
+						</div>
+						<p:outputPanel id="panelMedidas">
+							<div class="ui-grid-row">
+								<div class="ui-grid-col-3">
+									<div class="form-group">
+										<p:outputLabel for="txtDiametro"
+											value="#{msg['gerenciar.produto.campo.diametro']}" />
+										<div class="form-control">
+											<pe:inputNumber id="txtDiametro" decimalPlaces="2"
+												maxValue="999.99" emptyValue="empty"
+												value="#{manterProdutoMB.produtoModeloFiltro.diametro}"
+												decimalSeparator="#{msg['moeda.separador.decimal']}"
+												thousandSeparator="#{msg['moeda.separador.milhar']}" />
+											<p:message for="txtDiametro" display="text" showDetail="true" />
+										</div>
+									</div>
+								</div>
+								<div class="ui-grid-col-3">
+									<div class="form-group">
+										<p:outputLabel for="txtDiametro"
+											value="#{msg['gerenciar.produto.campo.espessura']}" />
+										<div class="form-control">
+											<pe:inputNumber id="txtEspessura" decimalPlaces="2"
+												maxValue="999.99" emptyValue="empty"
+												value="#{manterProdutoMB.produtoModeloFiltro.espessura}"
+												decimalSeparator="#{msg['moeda.separador.decimal']}"
+												thousandSeparator="#{msg['moeda.separador.milhar']}" />
+											<p:message for="txtEspessura" display="text"
+												showDetail="true" />
+										</div>
+									</div>
+								</div>
+								<div class="ui-grid-col-3">
+									<div class="form-group">
+										<p:outputLabel for="txtLargura"
+											value="#{msg['gerenciar.produto.campo.largura']}" />
+										<div class="form-control">
+											<pe:inputNumber id="txtLargura" decimalPlaces="2"
+												maxValue="999.99" emptyValue="empty"
+												value="#{manterProdutoMB.produtoModeloFiltro.largura}"
+												decimalSeparator="#{msg['moeda.separador.decimal']}"
+												thousandSeparator="#{msg['moeda.separador.milhar']}" />
+											<p:message for="txtLargura" display="text" showDetail="true" />
+										</div>
+									</div>
+								</div>
+								<div class="ui-grid-col-3">
+									<div class="form-group">
+										<p:outputLabel for="txtComprimento"
+											value="#{msg['gerenciar.produto.campo.comprimento']}" />
+										<div class="form-control">
+											<pe:inputNumber id="txtComprimento" decimalPlaces="2"
+												maxValue="999.99" emptyValue="empty"
+												value="#{manterProdutoMB.produtoModeloFiltro.comprimento}"
+												decimalSeparator="#{msg['moeda.separador.decimal']}"
+												thousandSeparator="#{msg['moeda.separador.milhar']}" />
+											<p:message for="txtComprimento" display="text"
+												showDetail="true" />
+										</div>
+									</div>
+								</div>
+								<div class="ui-grid-col-3">
+									<div class="form-group">
+										<p:outputLabel for="txtMassa"
+											value="#{msg['gerenciar.produto.campo.massa']}" />
+										<div class="form-control">
+											<pe:inputNumber id="txtMassa" decimalPlaces="2"
+												maxValue="999.99" emptyValue="empty"
+												value="#{manterProdutoMB.produtoModeloFiltro.massa}"
+												decimalSeparator="#{msg['moeda.separador.decimal']}"
+												thousandSeparator="#{msg['moeda.separador.milhar']}" />
+											<p:message for="txtMassa" display="text" showDetail="true" />
+										</div>
+									</div>
+								</div>
+							</div>
+						</p:outputPanel>
+						<div class="ui-grid-row">
+							<div class="ui-grid-col-6">
+								<div class="form-group">
+									<p:outputLabel for="txtDescricao"
+										value="#{msg['label.descricao']}" />
+									<div class="form-control">
+										<p:inputText id="txtDescricao"
+											value="#{manterProdutoMB.produtoModeloFiltro.descricao}"
+											maxlength="50" />
+									</div>
+								</div>
+							</div>
+							<div class="ui-grid-col-6">
+								<div class="form-group">
+									<p:outputLabel for="txtEspecificao"
+										value="#{msg['label.especificacao']}" />
+									<div class="form-control">
+										<p:inputText id="txtEspecificao"
+											value="#{manterProdutoMB.produtoModeloFiltro.especificacao}"
+											maxlength="50" />
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="ui-grid-row">
+							<div class="ui-grid-col">
+								<div class="form-group">
+									<p:outputLabel for="cmbStatus" value="#{msg['label.status']}" />
+									<div class="form-control">
+										<p:selectOneMenu id="cmbStatus" converter="statusConverter"
+											tabindex="3"
+											value="#{manterProdutoMB.produtoModeloFiltro.status}">
+											<f:selectItem itemLabel="#{msg['label.todos']}" itemValue="" />
+											<f:selectItems value="#{manterProdutoMB.status}" var="status"
+												itemLabel="#{msg[status.label]}" />
+										</p:selectOneMenu>
+									</div>
+								</div>
+							</div>
+							<div class="ui-grid-col-2">
+								<div class="form-group">
+									<p:outputLabel for="cmbSucata" value="#{msg['label.sucata']}" />
+									<div class="form-control">
+										<p:selectOneMenu id="cmbSucata" tabindex="3"
+											value="#{manterProdutoMB.produtoModeloFiltro.sucataBoolean}">
+											<f:selectItem itemLabel="#{msg['label.todos']}" />
+											<f:selectItem itemLabel="#{msg['label.sim']}"
+												itemValue="true" />
+											<f:selectItem itemLabel="#{msg['label.nao']}"
+												itemValue="false" />
+										</p:selectOneMenu>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</p:panel>
+			</div>
+		</div>
+		<div class="ui-grid-row">
+			<div class="ui-grid-col-12">
+				<p:dataTable id="listaProdutos" var="produto" paginator="true"
+					rows="#{ViewConstantes.DATA_TABLE_REGISTROS_POR_PAGINA}"
+					paginatorAlwaysVisible="false"
+					pageLinks="#{ViewConstantes.DATA_TABLE_PAGE_LINKS}"
+					selectionMode="single" rowKey="#{produto.id}"
+					selection="#{manterProdutoMB.produtoEmEdicao}" emptyMessage=""
+					resizableColumns="true" value="#{manterProdutoMB.listaProdutos}"
+					sortMode="multiple">
+					<p:ajax event="rowDblselect"
+						onstart="$('#frm\\:btnEditar').click();" />
+					<f:facet name="header">
+						<p:outputLabel value="Produtos" />
+						<p:commandButton id="toggler" type="button"
+							icon="ui-icon-calculator" styleClass="btnColunas" />
+						<p:columnToggler datasource="listaProdutos" trigger="toggler" />
+					</f:facet>
+					<p:column headerText="#{msg['label.sigla.codigo']}" priority="2"
+						sortBy="#{produto.id}" width="3%">
+						<h:outputText value="#{produto.id}" />
+					</p:column>
+					<p:column headerText="#{msg['label.tipo']}"
+						sortBy="#{produto.categoriaProduto.tipoProduto.descricao}"
+						width="7%">
+						<h:outputText
+							value="#{produto.categoriaProduto.tipoProduto.descricao}" />
+					</p:column>
+					<p:column headerText="#{msg['label.categoria']}"
+						sortBy="#{produto.categoriaProduto.descricao}" width="7%">
+						<h:outputText value="#{produto.categoriaProduto.descricao}" />
+					</p:column>
+					<p:column headerText="#{msg['label.descricao']}" priority="1"
+						sortBy="#{produto.descricao}" width="10%">
+						<h:outputText value="#{produto.descricao}" />
+					</p:column>
+					<p:column headerText="#{msg['label.sigla.espessura']}"
+						sortBy="#{produto.espessura}" width="5%">
+						<h:outputText value="#{produto.espessura}">
+							<f:convertNumber locale="#{manterProdutoMB.locale}" />
+						</h:outputText>
+					</p:column>
+					<p:column headerText="#{msg['label.sigla.diametro']}"
+						sortBy="#{produto.diametro}" width="5%">
+						<h:outputText value="#{produto.diametro}">
+							<f:convertNumber locale="#{manterProdutoMB.locale}" />
+						</h:outputText>
+					</p:column>
+					<p:column headerText="#{msg['label.sigla.comprimento']}"
+						sortBy="#{produto.comprimento}" width="5%">
+						<h:outputText value="#{produto.comprimento}">
+							<f:convertNumber locale="#{manterProdutoMB.locale}" />
+						</h:outputText>
+					</p:column>
+					<p:column headerText="#{msg['label.sigla.largura']}"
+						sortBy="#{produto.largura}" width="5%">
+						<h:outputText value="#{produto.largura}">
+							<f:convertNumber locale="#{manterProdutoMB.locale}" />
+						</h:outputText>
+					</p:column>
+					<p:column headerText="#{msg['label.sigla.massa']}"
+						sortBy="#{produto.massa}" width="5%">
+						<h:outputText value="#{produto.massa}">
+							<f:convertNumber locale="#{manterProdutoMB.locale}" />
+						</h:outputText>
+					</p:column>
+					<p:column headerText="#{msg['label.especificacao']}"
+						sortBy="#{produto.especificacao}" width="12%">
+						<h:outputText value="#{produto.especificacao}" />
+					</p:column>
+					<p:column headerText="#{msg['label.sucata']}"
+						sortBy="#{msg[produto.sucata.label]}" width="5%">
+						<h:outputText value="#{msg[produto.sucata.label]}" />
+					</p:column>
+					<p:column headerText="#{msg['label.status']}"
+						sortBy="#{msg[produto.status.label]}" width="5%">
+						<h:outputText value="#{msg[produto.status.label]}" />
+					</p:column>
+				</p:dataTable>
+			</div>
+		</div>
+	</div>
+</ui:composition>

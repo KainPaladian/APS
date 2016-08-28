@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<ui:composition template="/WEB-INF/templates/templateModal.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<f:metadata>
+		<pe:importConstants
+			className="br.com.aps.cliente.jsf.util.ViewConstantes"
+			var="ViewConstantes" />
+		<f:viewParam name="#{ViewConstantes.NOME_PARAMETRO_OUTCOME}"
+			value="#{manterProdutoMB.outcome}" />
+	</f:metadata>
+	<ui:define name="tituloModal">
+		#{msg['manter.orcamento.titulo.selecione.um.produto']}
+	</ui:define>
+	<ui:define name="corpoModal">
+		<span class="invisivel">#{manterOrcamentoMB}</span>
+		<ui:include
+			src="/faces/produto/listar/listarProdutoCorpoFragmento.xhtml">
+		</ui:include>
+	</ui:define>
+	<ui:define name="menuInferiorModal">
+		<ui:include
+			src="/faces/produto/listar/dialog/listarProdutoDialogMenuFragmento.xhtml">
+		</ui:include>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PROCESS model-entity="JSFProcess">
+ <PROCESS-ITEM NAME="rules:*" PATH="*" SHAPE="32,17,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:*:0" NAME="item" PATH="*" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="novoCliente::#faces#cliente#manterCliente.xhtml" NAME="output"
+    PATH="/faces/cliente/manterCliente.xhtml"
+    TARGET="rules:#faces#cliente#manterCliente.xhtml"
+    TITLE="novoCliente" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:*:1" PATH="*" SHAPE="32,129,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:*:1" NAME="item" PATH="*" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="editarCliente::#faces#cliente#manterCliente.xhtml" NAME="output"
+    PATH="/faces/cliente/manterCliente.xhtml"
+    TARGET="rules:#faces#cliente#manterCliente.xhtml"
+    TITLE="editarCliente" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:*:2" PATH="*" SHAPE="32,241,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:*:2" NAME="item" PATH="*" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="listarClientes::#faces#cliente#listar#listarCliente.xhtml"
+    NAME="output" PATH="/faces/cliente/listar/listarCliente.xhtml"
+    TARGET="rules:#faces#cliente#listar#listarCliente.xhtml"
+    TITLE="listarClientes" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:*:3" PATH="*" SHAPE="32,353,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:*:3" NAME="item" PATH="*" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="novoOrcamento::#faces#orcamento#manterOrcamento.xhtml"
+    NAME="output" PATH="/faces/orcamento/manterOrcamento.xhtml"
+    TARGET="rules:#faces#orcamento#manterOrcamento.xhtml"
+    TITLE="novoOrcamento" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:*:4" PATH="*" SHAPE="32,465,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:*:4" NAME="item" PATH="*" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="selecionarClienteOrcamento::#faces#cliente#listar#dialog#dialogListarCliente.xhtml"
+    NAME="output"
+    PATH="/faces/cliente/listar/dialog/dialogListarCliente.xhtml"
+    TARGET="rules:#faces#cliente#listar#dialog#dialogListarCliente.xhtml"
+    TITLE="selecionarClienteOrcamento" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:*:5" PATH="*" SHAPE="32,577,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:*:5" NAME="item" PATH="*" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="novoProduto::#faces#produto#manterProduto.xhtml" NAME="output"
+    PATH="/faces/produto/manterProduto.xhtml"
+    TARGET="rules:#faces#produto#manterProduto.xhtml"
+    TITLE="novoProduto" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:*:6" PATH="*" SHAPE="32,689,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:*:6" NAME="item" PATH="*" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="editarProduto::#faces#produto#manterProduto.xhtml" NAME="output"
+    PATH="/faces/produto/manterProduto.xhtml"
+    TARGET="rules:#faces#produto#manterProduto.xhtml"
+    TITLE="editarProduto" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:*:7" PATH="*" SHAPE="32,801,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:*:7" NAME="item" PATH="*" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="listarProdutos::#faces#produto#listar#listarProduto.xhtml"
+    NAME="output" PATH="/faces/produto/listar/listarProduto.xhtml"
+    TARGET="rules:#faces#produto#listar#listarProduto.xhtml"
+    TITLE="listarProdutos" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#faces#cliente#manterCliente.xhtml"
+  PATH="/faces/cliente/manterCliente.xhtml" SHAPE="256,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#faces#cliente#listar#listarCliente.xhtml"
+  PATH="/faces/cliente/listar/listarCliente.xhtml" SHAPE="240,257,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#faces#orcamento#manterOrcamento.xhtml"
+  PATH="/faces/orcamento/manterOrcamento.xhtml" SHAPE="240,369,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM
+  NAME="rules:#faces#cliente#listar#dialog#dialogListarCliente.xhtml"
+  PATH="/faces/cliente/listar/dialog/dialogListarCliente.xhtml"
+  SHAPE="240,481,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#faces#produto#manterProduto.xhtml"
+  PATH="/faces/produto/manterProduto.xhtml" SHAPE="256,593,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#faces#produto#listar#listarProduto.xhtml"
+  PATH="/faces/produto/listar/listarProduto.xhtml" SHAPE="240,817,0,0" model-entity="JSFProcessGroup"/>
+</PROCESS>

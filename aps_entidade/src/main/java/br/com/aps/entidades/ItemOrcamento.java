@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -41,9 +42,13 @@ public class ItemOrcamento implements Serializable {
 	@Column(unique = true, nullable = false)
 	private Long id;
 
-	@ManyToOne(fetch = FetchType.EAGER, optional = false)
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "id_orcamento", nullable = false)
 	private Orcamento orcamento;
+
+	@OneToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "id_produto", nullable = false)
+	private Produto produto;
 
 	@Column(nullable = false)
 	private Integer quantidade;
@@ -60,6 +65,10 @@ public class ItemOrcamento implements Serializable {
 		return id;
 	}
 
+	public Produto getProduto() {
+		return produto;
+	}
+
 	public Integer getQuantidade() {
 		return quantidade;
 	}
@@ -74,6 +83,10 @@ public class ItemOrcamento implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public void setProduto(Produto produto) {
+		this.produto = produto;
 	}
 
 	public void setQuantidade(Integer quantidade) {

@@ -54,7 +54,10 @@
 			</div>
 		</div>
 		<p:separator />
+		<f:event listener="#{manterOrcamentoMB.onPreRenderView}"
+			type="preRenderView" />
 		<p:wizard id="wizard" widgetVar="wizard"
+			step="#{manterOrcamentoMB.step}"
 			flowListener="#{manterOrcamentoMB.handleFlow}"
 			nextLabel="#{msg['manter.orcamento.wizard.next']}" showNavBar="true"
 			showStepStatus="true"
@@ -64,6 +67,7 @@
 				<ui:include src="abaDadosCliente.xhtml" />
 			</p:tab>
 			<p:tab id="abaDescricao" title="#{msg['label.descricao']}">
+				<ui:include src="abaDescricao.xhtml" />
 			</p:tab>
 			<p:tab id="abaCondicoesEntrega"
 				title="#{msg['manter.orcamento.aba.condicoes.entrega']}">

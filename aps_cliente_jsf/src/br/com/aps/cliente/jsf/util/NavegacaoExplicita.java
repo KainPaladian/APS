@@ -1,7 +1,7 @@
 package br.com.aps.cliente.jsf.util;
 
 /**
- * Strings para navegações entre as páginas de forma explícita.
+ * Strings para navegaï¿½ï¿½es entre as pï¿½ginas de forma explï¿½cita.
  * 
  * @author Gustavo
  *
@@ -9,13 +9,18 @@ package br.com.aps.cliente.jsf.util;
 public abstract class NavegacaoExplicita {
 
 	/**
+	 * Manter Orcamento
+	 */
+	public static final String MANTER_ORCAMENTO = "/faces/orcamento/manterOrcamento";
+
+	/**
 	 * Manter Cliente
 	 */
 	public static final String SELECAO_CLIENTE = "/faces/cliente/listar/dialog/dialogListarCliente";
-	
+
 	/**
-	 * Manter Orçamento
+	 * Manter Produto
 	 */
-	public static final String MANTER_ORCAMENTO = "/faces/orcamento/manterOrcamento";
+	public static final String SELECAO_PRODUTO = "/faces/produto/listar/dialog/dialogListarProduto";
 
 }

@@ -8,6 +8,9 @@ public final class ViewConstantes {
 	public static final String NOME_PARAMETRO_ID_CLIENTE_SELECIONADO = "idClienteSelecionado";
 	public static final String VALOR_PARAMETRO_CLIENTE_NAO_SELECIONADO = "null";
 	
+	public static final String NOME_PARAMETRO_ID_PRODUTO_SELECIONADO = "idProdutoSelecionado";
+	public static final String VALOR_PARAMETRO_PRODUTO_NAO_SELECIONADO = "null";
+	
 	public static final String NOME_PARAMETRO_SESSAO_EMPRESA_SELECIONADA = "EMPRESA_SELECIONADA";
 	public static final String NOME_PARAMETRO_SESSAO_USUARIO_AUTENTICADO = "USUARIO_AUTENTICADO";
 	

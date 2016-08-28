@@ -42,6 +42,10 @@ public class ManterOrcamentoMB extends APSManageBean implements Serializable {
 
 	private static final String MSG_ORCAMENTO_FOI_SALVO_COM_SUCESSO = "manter.orcamento.msg.salvo.sucesso.orcamento";
 
+	public static final String MSG_PRODUTO_NAO_SELECIONADO = "manter.orcamento.msg.produto.nao.selecionado";
+
+	public static final String MSG_PRODUTO_SELECIONADO_SUCESSO = "manter.orcamento.msg.produto.selecionado.sucesso";
+
 	private static final String MSG_TIPO_FLUXO_CADASTRO_ORCAMENTO = "manter.orcamento.tipo.fluxo.cadastro.orcamento";
 
 	private static final String MSG_TIPO_FLUXO_EDICAO_ORCAMENTO = "manter.orcamento.tipo.fluxo.edicao.orcamento";
@@ -64,7 +68,13 @@ public class ManterOrcamentoMB extends APSManageBean implements Serializable {
 
 	private Orcamento orcamentoModeloFiltro;
 
+	private String step = getStepAbaCliente();
+
 	private TipoFluxoCRUDEnum tipoFluxoTela;
+
+	private void atualizarListaOrcamentos() {
+		listaOrcamentos = obterTodosOrcamentos();
+	}
 
 	public String clickBotaoEditar() {
 		if (hasOrcamentoEmEdicao()) {
@@ -109,6 +119,14 @@ public class ManterOrcamentoMB extends APSManageBean implements Serializable {
 						+ TipoFluxoCRUDEnum.SEARCH);
 	}
 
+	public String clickBotaoSelecionarProduto() {
+		return gerarURLOutComeExplicita(NavegacaoExplicita.SELECAO_PRODUTO,
+				ViewConstantes.NOME_PARAMETRO_OUTCOME + "="
+						+ NavegacaoExplicita.MANTER_ORCAMENTO,
+				ViewConstantes.NOME_PARAMETRO_TIPO_FLUXO_CRUD + "="
+						+ TipoFluxoCRUDEnum.SEARCH);
+	}
+
 	public ClienteBO getClienteBO() {
 		return clienteBO;
 	}
@@ -141,6 +159,18 @@ public class ManterOrcamentoMB extends APSManageBean implements Serializable {
 		return Arrays.asList(AtivoInativoEnum.values());
 	}
 
+	public String getStep() {
+		return step;
+	}
+
+	private String getStepAbaCliente() {
+		return "abaDadosCliente";
+	}
+
+	private String getStepAbaProduto() {
+		return "abaDescricao";
+	}
+
 	public TipoFluxoCRUDEnum getTipoFluxoTela() {
 		return tipoFluxoTela;
 	}
@@ -166,13 +196,25 @@ public class ManterOrcamentoMB extends APSManageBean implements Serializable {
 		if (orcamentoEmEdicao.getCliente() != null
 				|| orcamentoEmEdicao.getClienteBalcao() != null) {
 			if (!stepToGo.isEmpty())
-				return stepToGo;
+				step = stepToGo;
 			else
-				return currentStepId;
+				step = currentStepId;
 		} else {
 			addMensagemErro(MSG_DADOS_CLIENTE_NAO_INFORMADOS);
-			return currentStepId;
+			step = currentStepId;
 		}
+		return step;
+	}
+
+	private boolean hasOrcamentoEmEdicao() {
+		return this.orcamentoEmEdicao != null
+				&& this.orcamentoEmEdicao.getId() != null
+				&& this.orcamentoEmEdicao.getId().intValue() != 0;
+	}
+
+	private void iniciarFluxoEdicao(Orcamento OrcamentoParaEditar) {
+		this.tipoFluxoTela = TipoFluxoCRUDEnum.UPDATE;
+		this.orcamentoEmEdicao = OrcamentoParaEditar;
 	}
 
 	public String iniciarFluxoNovo() {
@@ -205,24 +247,13 @@ public class ManterOrcamentoMB extends APSManageBean implements Serializable {
 		this.orcamentoEmEdicao = novoOrcamento;
 	}
 
+	private List<Orcamento> obterTodosOrcamentos() {
+		return orcamentoBO.listarTodos();
+	}
+
 	public void onPreRenderView(ComponentSystemEvent event) {
-		String nomeParametro = ViewConstantes.NOME_PARAMETRO_ID_CLIENTE_SELECIONADO;
-		String returnIdClienteSelecionado = getContext().getExternalContext()
-				.getRequestParameterMap().get(nomeParametro);
-		boolean clienteInformadoNoQueryString = returnIdClienteSelecionado != null
-				&& !returnIdClienteSelecionado.isEmpty();
-		if (clienteInformadoNoQueryString
-				&& !returnIdClienteSelecionado
-						.equals(ViewConstantes.VALOR_PARAMETRO_CLIENTE_NAO_SELECIONADO)) {
-			setClienteSelecionado(clienteBO.getPorId(Long
-					.parseLong(returnIdClienteSelecionado)));
-			addMensagemSucesso(MSG_CLIENTE_SELECIONADO_SUCESSO);
-		} else if (clienteInformadoNoQueryString
-				&& returnIdClienteSelecionado
-						.equals(ViewConstantes.VALOR_PARAMETRO_CLIENTE_NAO_SELECIONADO)) {
-			addMensagemAlerta(MSG_CLIENTE_NAO_SELECIONADO);
-			removerClienteSelecionado();
-		}
+		verificarFluxoRetornoSelecaoCliente();
+		verificarFluxoRetornoSelecaoProduto();
 	}
 
 	public void onValueChangeListenerClienteBalcao(ValueChangeEvent event) {
@@ -233,6 +264,10 @@ public class ManterOrcamentoMB extends APSManageBean implements Serializable {
 			removerClienteBalcao();
 		}
 		removerClienteSelecionado();
+	}
+
+	private void removerClienteBalcao() {
+		orcamentoEmEdicao.setClienteBalcao(null);
 	}
 
 	public void removerClienteSelecionado() {
@@ -280,36 +315,60 @@ public class ManterOrcamentoMB extends APSManageBean implements Serializable {
 		this.orcamentoModeloFiltro = OrcamentoModeloFiltro;
 	}
 
+	public void setStep(String step) {
+		this.step = step;
+	}
+
 	public void setTipoFluxoTela(TipoFluxoCRUDEnum tipoFluxoTela) {
 		this.tipoFluxoTela = tipoFluxoTela;
+	}
+
+	private void verificarFluxoRetornoSelecaoCliente() {
+		String nomeParametro = ViewConstantes.NOME_PARAMETRO_ID_CLIENTE_SELECIONADO;
+		String returnIdClienteSelecionado = getContext().getExternalContext()
+				.getRequestParameterMap().get(nomeParametro);
+		boolean clienteInformadoNoQueryString = returnIdClienteSelecionado != null
+				&& !returnIdClienteSelecionado.isEmpty();
+		if (clienteInformadoNoQueryString
+				&& !returnIdClienteSelecionado
+						.equals(ViewConstantes.VALOR_PARAMETRO_CLIENTE_NAO_SELECIONADO)) {
+			setClienteSelecionado(clienteBO.getPorId(Long
+					.parseLong(returnIdClienteSelecionado)));
+			addMensagemSucesso(MSG_CLIENTE_SELECIONADO_SUCESSO);
+			step = getStepAbaCliente();
+		} else if (clienteInformadoNoQueryString
+				&& returnIdClienteSelecionado
+						.equals(ViewConstantes.VALOR_PARAMETRO_CLIENTE_NAO_SELECIONADO)) {
+			addMensagemAlerta(MSG_CLIENTE_NAO_SELECIONADO);
+			removerClienteSelecionado();
+		}
+
+	}
+
+	private void verificarFluxoRetornoSelecaoProduto() {
+		String nomeParametro = ViewConstantes.NOME_PARAMETRO_ID_PRODUTO_SELECIONADO;
+		String returnIdProdutoSelecionado = getContext().getExternalContext()
+				.getRequestParameterMap().get(nomeParametro);
+		boolean produtoInformadoNoQueryString = returnIdProdutoSelecionado != null
+				&& !returnIdProdutoSelecionado.isEmpty();
+		if (produtoInformadoNoQueryString
+				&& !returnIdProdutoSelecionado
+						.equals(ViewConstantes.VALOR_PARAMETRO_PRODUTO_NAO_SELECIONADO)) {
+			// TODO
+			addMensagemSucesso(MSG_PRODUTO_SELECIONADO_SUCESSO);
+			step = getStepAbaProduto();
+		} else if (produtoInformadoNoQueryString
+				&& returnIdProdutoSelecionado
+						.equals(ViewConstantes.VALOR_PARAMETRO_PRODUTO_NAO_SELECIONADO)) {
+			addMensagemAlerta(MSG_PRODUTO_NAO_SELECIONADO);
+			removerClienteSelecionado();
+		}
+
 	}
 
 	public String voltarTelaListar() {
 		this.tipoFluxoTela = TipoFluxoCRUDEnum.SEARCH;
 		return NavegacaoImplicita.LISTAR_ORCAMENTOS;
-	}
-
-	private void atualizarListaOrcamentos() {
-		listaOrcamentos = obterTodosOrcamentos();
-	}
-
-	private boolean hasOrcamentoEmEdicao() {
-		return this.orcamentoEmEdicao != null
-				&& this.orcamentoEmEdicao.getId() != null
-				&& this.orcamentoEmEdicao.getId().intValue() != 0;
-	}
-
-	private void iniciarFluxoEdicao(Orcamento OrcamentoParaEditar) {
-		this.tipoFluxoTela = TipoFluxoCRUDEnum.UPDATE;
-		this.orcamentoEmEdicao = OrcamentoParaEditar;
-	}
-
-	private List<Orcamento> obterTodosOrcamentos() {
-		return orcamentoBO.listarTodos();
-	}
-
-	private void removerClienteBalcao() {
-		orcamentoEmEdicao.setClienteBalcao(null);
 	}
 
 }

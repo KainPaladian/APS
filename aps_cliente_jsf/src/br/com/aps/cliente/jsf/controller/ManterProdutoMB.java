@@ -15,6 +15,7 @@ import org.apache.deltaspike.core.api.scope.ViewAccessScoped;
 import br.com.aps.cliente.jsf.util.MensagemResource;
 import br.com.aps.cliente.jsf.util.NavegacaoImplicita;
 import br.com.aps.cliente.jsf.util.TipoFluxoCRUDEnum;
+import br.com.aps.cliente.jsf.util.ViewConstantes;
 import br.com.aps.commons.exception.APSServicoException;
 import br.com.aps.entidades.CategoriaProduto;
 import br.com.aps.entidades.Produto;
@@ -48,6 +49,8 @@ public class ManterProdutoMB extends APSManageBean implements Serializable {
 
 	private List<TipoProduto> listaTiposProduto;
 
+	private String outcome;
+
 	@Inject
 	private ProdutoBO produtoBO;
 
@@ -58,6 +61,15 @@ public class ManterProdutoMB extends APSManageBean implements Serializable {
 	private TipoFluxoCRUDEnum tipoFluxoTela;
 
 	private TipoProduto tipoProdutoSelecionado;
+
+	private void carregarListaCategoriasProduto(TipoProduto tipoProduto) {
+		this.listaCategoriasProduto = produtoBO.obterTipoProdutoComCategorias(
+				tipoProduto).getCategoriasProduto();
+	}
+
+	private void carregarListaTiposProduto() {
+		this.listaTiposProduto = produtoBO.listarTiposProduto();
+	}
 
 	public String clickBotaoEditar() {
 		if (hasProdutoEmEdicao()) {
@@ -97,6 +109,25 @@ public class ManterProdutoMB extends APSManageBean implements Serializable {
 		addMensagemSucesso(MensagemResource.MSG_GERAL_PESQUISA_REALIZADA_COM_SUCESSO);
 	}
 
+	public String clickBotaoSelecionar() {
+		if (produtoEmEdicao == null && listaProdutos != null
+				&& listaProdutos.size() == 1) {
+			setProdutoEmEdicao(listaProdutos.get(0));
+		}
+		return gerarURLOutComeExplicita(
+				outcome,
+				ViewConstantes.NOME_PARAMETRO_ID_PRODUTO_SELECIONADO
+						+ "="
+						+ (produtoEmEdicao != null ? produtoEmEdicao.getId()
+								.toString()
+								: ViewConstantes.VALOR_PARAMETRO_CLIENTE_NAO_SELECIONADO));
+	}
+
+	public String clickBotaoVoltarSelecaoProduto() {
+		setProdutoEmEdicao(null);
+		return clickBotaoSelecionar();
+	}
+
 	public void cmbTipoProdutoValuChangeListener(ValueChangeEvent event) {
 
 	}
@@ -111,6 +142,10 @@ public class ManterProdutoMB extends APSManageBean implements Serializable {
 
 	public List<TipoProduto> getListaTiposProduto() {
 		return listaTiposProduto;
+	}
+
+	public String getOutcome() {
+		return outcome;
 	}
 
 	public Produto getProdutoEmEdicao() {
@@ -155,6 +190,22 @@ public class ManterProdutoMB extends APSManageBean implements Serializable {
 		return result != null ? result.toString() : null;
 	}
 
+	private boolean hasProdutoEmEdicao() {
+		return this.produtoEmEdicao != null
+				&& this.produtoEmEdicao.getId() != null
+				&& this.produtoEmEdicao.getId().intValue() != 0;
+	}
+
+	private void iniciarFluxoEdicao(Produto produtoParaEditar) {
+		this.tipoFluxoTela = TipoFluxoCRUDEnum.UPDATE;
+		this.produtoEmEdicao = produtoBO
+				.obterProdutoParaEdicao(produtoParaEditar);
+		carregarListaTiposProduto();
+		this.tipoProdutoSelecionado = this.produtoEmEdicao
+				.getCategoriaProduto().getTipoProduto();
+		carregarListaCategoriasProduto(this.tipoProdutoSelecionado);
+	}
+
 	public String iniciarFluxoNovo() {
 		this.tipoFluxoTela = TipoFluxoCRUDEnum.CREATE;
 		this.produtoEmEdicao = new Produto();
@@ -179,88 +230,6 @@ public class ManterProdutoMB extends APSManageBean implements Serializable {
 
 	}
 
-	public void onChangeTipoProduto() {
-		if (tipoProdutoSelecionado != null) {
-			tipoProdutoSelecionado = produtoBO
-					.obterTipoProdutoComCategorias(tipoProdutoSelecionado);
-			carregarListaCategoriasProduto(tipoProdutoSelecionado);
-		} else {
-			limparListaCategoriaProduto();
-		}
-	}
-
-	public String salvar() {
-		try {
-			prepararProdutoParaSalvar(this.produtoEmEdicao);
-			produtoBO.salvar(produtoEmEdicao);
-			addMensagemSucesso(MSG_PRODUTO_FOI_SALVO_COM_SUCESSO);
-			return voltarTelaListar();
-		} catch (APSServicoException e) {
-			addMensagemErro(e.getMessage());
-			return null;
-		}
-	}
-
-	public void setListaCategoriasProduto(
-			List<CategoriaProduto> listaCategoriasProduto) {
-		this.listaCategoriasProduto = listaCategoriasProduto;
-	}
-
-	public void setListaProdutos(List<Produto> listaProdutos) {
-		this.listaProdutos = listaProdutos;
-	}
-
-	public void setListaTiposProduto(List<TipoProduto> listaTiposProduto) {
-		this.listaTiposProduto = listaTiposProduto;
-	}
-
-	public void setProdutoEmEdicao(Produto produtoEmEdicao) {
-		this.produtoEmEdicao = produtoEmEdicao;
-	}
-
-	public void setProdutoModeloFiltro(Produto produtoModeloFiltro) {
-		this.produtoModeloFiltro = produtoModeloFiltro;
-	}
-
-	public void setTipoFluxoTela(TipoFluxoCRUDEnum tipoFluxoTela) {
-		this.tipoFluxoTela = tipoFluxoTela;
-	}
-
-	public void setTipoProdutoSelecionado(TipoProduto tipoProdutoSelecionado) {
-		this.tipoProdutoSelecionado = tipoProdutoSelecionado;
-	}
-
-	public String voltarTelaListar() {
-		this.tipoFluxoTela = TipoFluxoCRUDEnum.SEARCH;
-		clickBotaoLimpar();
-		return NavegacaoImplicita.LISTAR_PRODUTOS;
-	}
-
-	private void carregarListaCategoriasProduto(TipoProduto tipoProduto) {
-		this.listaCategoriasProduto = produtoBO.obterTipoProdutoComCategorias(
-				tipoProduto).getCategoriasProduto();
-	}
-
-	private void carregarListaTiposProduto() {
-		this.listaTiposProduto = produtoBO.listarTiposProduto();
-	}
-
-	private boolean hasProdutoEmEdicao() {
-		return this.produtoEmEdicao != null
-				&& this.produtoEmEdicao.getId() != null
-				&& this.produtoEmEdicao.getId().intValue() != 0;
-	}
-
-	private void iniciarFluxoEdicao(Produto produtoParaEditar) {
-		this.tipoFluxoTela = TipoFluxoCRUDEnum.UPDATE;
-		this.produtoEmEdicao = produtoBO
-				.obterProdutoParaEdicao(produtoParaEditar);
-		carregarListaTiposProduto();
-		this.tipoProdutoSelecionado = this.produtoEmEdicao
-				.getCategoriaProduto().getTipoProduto();
-		carregarListaCategoriasProduto(this.tipoProdutoSelecionado);
-	}
-
 	private void limparFiltro() {
 		produtoModeloFiltro = new Produto();
 		produtoModeloFiltro.setStatus(null);
@@ -281,6 +250,16 @@ public class ManterProdutoMB extends APSManageBean implements Serializable {
 	private void limparListaProdutos() {
 		this.listaProdutos = new ArrayList<Produto>();
 		this.tipoProdutoSelecionado = null;
+	}
+
+	public void onChangeTipoProduto() {
+		if (tipoProdutoSelecionado != null) {
+			tipoProdutoSelecionado = produtoBO
+					.obterTipoProdutoComCategorias(tipoProdutoSelecionado);
+			carregarListaCategoriasProduto(tipoProdutoSelecionado);
+		} else {
+			limparListaCategoriaProduto();
+		}
 	}
 
 	private void prepararEmpresa(Produto produtoEmEdicao) {
@@ -311,5 +290,56 @@ public class ManterProdutoMB extends APSManageBean implements Serializable {
 		prepararPercentualMaximoDesconto(produtoEmEdicao);
 		prepararMedidas(produtoEmEdicao);
 
+	}
+
+	public String salvar() {
+		try {
+			prepararProdutoParaSalvar(this.produtoEmEdicao);
+			produtoBO.salvar(produtoEmEdicao);
+			addMensagemSucesso(MSG_PRODUTO_FOI_SALVO_COM_SUCESSO);
+			return voltarTelaListar();
+		} catch (APSServicoException e) {
+			addMensagemErro(e.getMessage());
+			return null;
+		}
+	}
+
+	public void setListaCategoriasProduto(
+			List<CategoriaProduto> listaCategoriasProduto) {
+		this.listaCategoriasProduto = listaCategoriasProduto;
+	}
+
+	public void setListaProdutos(List<Produto> listaProdutos) {
+		this.listaProdutos = listaProdutos;
+	}
+
+	public void setListaTiposProduto(List<TipoProduto> listaTiposProduto) {
+		this.listaTiposProduto = listaTiposProduto;
+	}
+
+	public void setOutcome(String outcome) {
+		this.outcome = outcome;
+	}
+
+	public void setProdutoEmEdicao(Produto produtoEmEdicao) {
+		this.produtoEmEdicao = produtoEmEdicao;
+	}
+
+	public void setProdutoModeloFiltro(Produto produtoModeloFiltro) {
+		this.produtoModeloFiltro = produtoModeloFiltro;
+	}
+
+	public void setTipoFluxoTela(TipoFluxoCRUDEnum tipoFluxoTela) {
+		this.tipoFluxoTela = tipoFluxoTela;
+	}
+
+	public void setTipoProdutoSelecionado(TipoProduto tipoProdutoSelecionado) {
+		this.tipoProdutoSelecionado = tipoProdutoSelecionado;
+	}
+
+	public String voltarTelaListar() {
+		this.tipoFluxoTela = TipoFluxoCRUDEnum.SEARCH;
+		clickBotaoLimpar();
+		return NavegacaoImplicita.LISTAR_PRODUTOS;
 	}
 }
