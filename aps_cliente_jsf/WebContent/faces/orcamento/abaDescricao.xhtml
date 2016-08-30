@@ -30,17 +30,19 @@
 							value="#{msg['manter.orcamento.titulo.itens.orcamento']}" />
 					</f:facet>
 					<p:column headerText="#{msg['label.produto']}" priority="1"
-						sortBy="#{item.produto.descricao}" width="3%">
+						sortBy="#{item.produto.descricao}">
 						<h:outputText value="#{item.produto.descricao}" />
 					</p:column>
-					<p:column headerText="#{msg['label.quantidade']}" priority="1"
-						sortBy="#{item.quantidade}" width="3%">
+					<p:column headerText="#{msg['label.quantidade']}" priority="2"
+						sortBy="#{item.quantidade}">
 						<p:cellEditor>
 							<f:facet name="output">
 								<h:outputText value="#{item.quantidade}" />
 							</f:facet>
 							<f:facet name="input">
-								<p:inputText value="#{item.quantidade}" />
+								<pe:inputNumber maxValue="999" emptyValue="0"
+									value="#{item.quantidade}"
+									thousandSeparator="#{msg['moeda.separador.milhar']}" />
 							</f:facet>
 						</p:cellEditor>
 					</p:column>

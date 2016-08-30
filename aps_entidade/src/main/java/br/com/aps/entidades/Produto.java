@@ -1,5 +1,7 @@
 package br.com.aps.entidades;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -18,15 +20,20 @@ import br.com.aps.entidades.enumeration.AtivoInativoEnum;
 import br.com.aps.entidades.enumeration.SimNaoEnum;
 
 /**
- * Peça de metal bruta, utilizada como matéria prima, que cortada, produz as
- * peças solicitadas nos projetos.
+ * Peï¿½a de metal bruta, utilizada como matï¿½ria prima, que cortada, produz as
+ * peï¿½as solicitadas nos projetos.
  * 
  * @author Gustavo
  *
  */
 @Entity
 @Table
-public class Produto {
+public class Produto implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3810275298473886971L;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_categoria_produto", nullable = false)
