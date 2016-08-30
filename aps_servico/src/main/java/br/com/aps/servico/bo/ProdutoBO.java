@@ -45,6 +45,10 @@ public class ProdutoBO implements Serializable {
 		return produtoDAO.getParaEdicao(produtoParaEdicao);
 	}
 
+	public Produto obterProdutoPorId(Long id) {
+		return produtoDAO.getPorId(id);
+	}
+
 	public TipoProduto obterTipoProdutoComCategorias(TipoProduto tipoProduto) {
 		return tipoProdutoDAO.getComCategorias(tipoProduto);
 	}

@@ -10,10 +10,41 @@
 	<div class="ui-grid ui-grid-responsive">
 		<div class="ui-grid-row">
 			<div class="ui-grid-col-12">
-				<p:commandButton
-					value="#{msg['manter.orcamento.label.produto.pesquise']}"
-					ajax="true"
+				<p:commandButton value="#{msg['manter.orcamento.label.novo.item']}"
+					ajax="true" icon="fa fa-plus"
 					action="#{manterOrcamentoMB.clickBotaoSelecionarProduto}" />
+			</div>
+		</div>
+		<div class="ui-grid-row">
+			<div class="ui-grid-col-12">
+				<p:dataTable id="listaItensOrcamento" var="item" paginator="true"
+					rows="#{ViewConstantes.DATA_TABLE_REGISTROS_POR_PAGINA}"
+					paginatorAlwaysVisible="false"
+					pageLinks="#{ViewConstantes.DATA_TABLE_PAGE_LINKS}"
+					selectionMode="single" rowKey="#{item.produto.id}" emptyMessage=""
+					resizableColumns="true" value="#{manterOrcamentoMB.itensOrcamento}"
+					editable="true" editMode="cell" widgetVar="itemCelula"
+					sortMode="multiple">
+					<f:facet name="header">
+						<p:outputLabel
+							value="#{msg['manter.orcamento.titulo.itens.orcamento']}" />
+					</f:facet>
+					<p:column headerText="#{msg['label.produto']}" priority="1"
+						sortBy="#{item.produto.descricao}" width="3%">
+						<h:outputText value="#{item.produto.descricao}" />
+					</p:column>
+					<p:column headerText="#{msg['label.quantidade']}" priority="1"
+						sortBy="#{item.quantidade}" width="3%">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{item.quantidade}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{item.quantidade}" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+				</p:dataTable>
 			</div>
 		</div>
 	</div>

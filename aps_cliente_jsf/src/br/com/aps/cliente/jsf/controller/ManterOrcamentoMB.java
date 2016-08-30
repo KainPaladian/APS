@@ -1,6 +1,7 @@
 package br.com.aps.cliente.jsf.controller;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -21,12 +22,15 @@ import br.com.aps.cliente.jsf.util.ViewConstantes;
 import br.com.aps.commons.exception.APSServicoException;
 import br.com.aps.entidades.Cliente;
 import br.com.aps.entidades.ClienteBalcao;
+import br.com.aps.entidades.ItemOrcamento;
 import br.com.aps.entidades.Orcamento;
+import br.com.aps.entidades.Produto;
 import br.com.aps.entidades.enumeration.AtivoInativoEnum;
 import br.com.aps.entidades.enumeration.EstadosBrasileirosEnum;
 import br.com.aps.entidades.enumeration.TipoPessoaEnum;
 import br.com.aps.servico.bo.ClienteBO;
 import br.com.aps.servico.bo.OrcamentoBO;
+import br.com.aps.servico.bo.ProdutoBO;
 
 @Named
 @ViewAccessScoped
@@ -41,6 +45,8 @@ public class ManterOrcamentoMB extends APSManageBean implements Serializable {
 	private static final String MSG_ORCAMENTO_EXCLUIDO_COM_SUCESSO = "manter.orcamento.msg.excluido.sucesso.orcamento";
 
 	private static final String MSG_ORCAMENTO_FOI_SALVO_COM_SUCESSO = "manter.orcamento.msg.salvo.sucesso.orcamento";
+
+	public static final String MSG_PRODUTO_JA_SELECIONADO_SUCESSO = "manter.orcamento.msg.produto.ja.selecionado.sucesso";
 
 	public static final String MSG_PRODUTO_NAO_SELECIONADO = "manter.orcamento.msg.produto.nao.selecionado";
 
@@ -59,6 +65,8 @@ public class ManterOrcamentoMB extends APSManageBean implements Serializable {
 	@Inject
 	private ClienteBO clienteBO;
 
+	private List<ItemOrcamento> itensOrcamento = new ArrayList<ItemOrcamento>();
+
 	private List<Orcamento> listaOrcamentos;
 
 	@Inject
@@ -67,6 +75,9 @@ public class ManterOrcamentoMB extends APSManageBean implements Serializable {
 	private Orcamento orcamentoEmEdicao;
 
 	private Orcamento orcamentoModeloFiltro;
+
+	@Inject
+	private ProdutoBO produtoBO;
 
 	private String step = getStepAbaCliente();
 
@@ -137,6 +148,10 @@ public class ManterOrcamentoMB extends APSManageBean implements Serializable {
 
 	public List<EstadosBrasileirosEnum> getEstadosBrasileiros() {
 		return Arrays.asList(EstadosBrasileirosEnum.values());
+	}
+
+	public List<ItemOrcamento> getItensOrcamento() {
+		return itensOrcamento;
 	}
 
 	public List<Orcamento> getListaOrcamentos() {
@@ -299,6 +314,10 @@ public class ManterOrcamentoMB extends APSManageBean implements Serializable {
 		this.clienteBalcao = false;
 	}
 
+	public void setItensOrcamento(List<ItemOrcamento> itensOrcamento) {
+		this.itensOrcamento = itensOrcamento;
+	}
+
 	public void setListaOrcamentos(List<Orcamento> listaOrcamentos) {
 		this.listaOrcamentos = listaOrcamentos;
 	}
@@ -354,8 +373,26 @@ public class ManterOrcamentoMB extends APSManageBean implements Serializable {
 		if (produtoInformadoNoQueryString
 				&& !returnIdProdutoSelecionado
 						.equals(ViewConstantes.VALOR_PARAMETRO_PRODUTO_NAO_SELECIONADO)) {
-			// TODO
-			addMensagemSucesso(MSG_PRODUTO_SELECIONADO_SUCESSO);
+			Long idProdutoSelecionado = Long
+					.parseLong(returnIdProdutoSelecionado);
+			boolean produtoJaSelecionado = false;
+			for (ItemOrcamento itemOrcamento : itensOrcamento) {
+				if (itemOrcamento.getProduto().getId()
+						.equals(idProdutoSelecionado)) {
+					produtoJaSelecionado = true;
+					break;
+				}
+			}
+			if (produtoJaSelecionado) {
+				addMensagemAlerta(MSG_PRODUTO_JA_SELECIONADO_SUCESSO);
+			} else {
+				Produto produtoSelecionado = produtoBO
+						.obterProdutoPorId(idProdutoSelecionado);
+				ItemOrcamento novoItemOrcamento = new ItemOrcamento();
+				novoItemOrcamento.setProduto(produtoSelecionado);
+				itensOrcamento.add(novoItemOrcamento);
+				addMensagemSucesso(MSG_PRODUTO_SELECIONADO_SUCESSO);
+			}
 			step = getStepAbaProduto();
 		} else if (produtoInformadoNoQueryString
 				&& returnIdProdutoSelecionado

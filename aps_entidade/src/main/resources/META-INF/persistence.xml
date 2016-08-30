@@ -20,7 +20,7 @@
 			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/aps" />
 			<property name="javax.persistence.jdbc.user" value="aps" />
 			<property name="javax.persistence.jdbc.password" value="aps" />
-			<property name="javax.persistence.schema-generation.database.action" value="drop-and-create" /> 
+			<!---<property name="javax.persistence.schema-generation.database.action" value="drop-and-create" />--> 
 			<!--<property name="javax.persistence.schema-generation.database.action" value="create" />-->
 			<property name=" hibernate.dialect " value="org.hibernate.dialect.PostgreSQLDialect " />
 			<property name=" hibernate.show_sql " value="true " />

@@ -218,7 +218,11 @@
 					resizableColumns="true" value="#{manterProdutoMB.listaProdutos}"
 					sortMode="multiple">
 					<p:ajax event="rowDblselect"
+						disabled="#{manterProdutoMB.outcome ne null}"
 						onstart="$('#frm\\:btnEditar').click();" />
+					<p:ajax event="rowDblselect"
+						disabled="#{manterProdutoMB.outcome eq null}"
+						onstart="$('#frm\\:btnSelecionar').click();" />
 					<f:facet name="header">
 						<p:outputLabel value="Produtos" />
 						<p:commandButton id="toggler" type="button"
