@@ -1,6 +1,7 @@
 package br.com.aps.entidades;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -51,7 +52,7 @@ public class ItemOrcamento implements Serializable {
 	private Produto produto;
 
 	@Column(nullable = false)
-	private Integer quantidade;
+	private Integer quantidade = 0;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "tipo_desconto", nullable = false, length = 1)
@@ -63,6 +64,27 @@ public class ItemOrcamento implements Serializable {
 
 	public Long getId() {
 		return id;
+	}
+
+	public BigDecimal getPrecoCalculadoComDesconto() {
+		BigDecimal subTotalComDesconto = BigDecimal.ZERO;
+		BigDecimal subTotalSemDesconto = getPrecoCalculadoSemDesconto();
+		if (subTotalSemDesconto != null
+				&& subTotalComDesconto.doubleValue() > 0) {
+			subTotalComDesconto = subTotalSemDesconto
+					.subtract(subTotalSemDesconto.multiply(new BigDecimal(
+							desconto / 100)));
+		}
+		return subTotalComDesconto;
+	}
+
+	public BigDecimal getPrecoCalculadoSemDesconto() {
+		BigDecimal result = BigDecimal.ZERO;
+		if (produto != null && quantidade != null) {
+			double subTotalSemDesconto = produto.getPreco() * quantidade;
+			result = BigDecimal.valueOf(subTotalSemDesconto);
+		}
+		return result;
 	}
 
 	public Produto getProduto() {

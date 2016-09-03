@@ -23,28 +23,48 @@
 					pageLinks="#{ViewConstantes.DATA_TABLE_PAGE_LINKS}"
 					selectionMode="single" rowKey="#{item.produto.id}" emptyMessage=""
 					resizableColumns="true" value="#{manterOrcamentoMB.itensOrcamento}"
-					editable="true" editMode="cell" widgetVar="itemCelula"
-					sortMode="multiple">
+					widgetVar="itemCelula" sortMode="multiple">
 					<f:facet name="header">
 						<p:outputLabel
 							value="#{msg['manter.orcamento.titulo.itens.orcamento']}" />
 					</f:facet>
-					<p:column headerText="#{msg['label.produto']}" priority="1"
-						sortBy="#{item.produto.descricao}">
-						<h:outputText value="#{item.produto.descricao}" />
+					<p:column headerText="#{msg['label.codigo']}" priority="1"
+						sortBy="#{item.produto.id}">
+						<p:outputLabel value="#{item.produto.id}" />
 					</p:column>
-					<p:column headerText="#{msg['label.quantidade']}" priority="2"
+					<p:column headerText="#{msg['label.categoria']}" priority="2"
+						sortBy="#{item.produto.categoriaProduto.descricao}">
+						<p:outputLabel value="#{item.produto.categoriaProduto.descricao}" />
+					</p:column>
+					<p:column headerText="#{msg['label.produto']}" priority="3"
+						sortBy="#{item.produto.descricao}">
+						<p:outputLabel value="#{item.produto.descricao}" />
+					</p:column>
+					<p:column headerText="#{msg['label.quantidade']}" priority="4"
 						sortBy="#{item.quantidade}">
-						<p:cellEditor>
-							<f:facet name="output">
-								<h:outputText value="#{item.quantidade}" />
-							</f:facet>
-							<f:facet name="input">
-								<pe:inputNumber maxValue="999" emptyValue="0"
-									value="#{item.quantidade}"
-									thousandSeparator="#{msg['moeda.separador.milhar']}" />
-							</f:facet>
-						</p:cellEditor>
+						<pe:inputNumber maxValue="999" emptyValue="0"
+							value="#{item.quantidade}">
+							<pe:keyFilter regEx="#{msg['regex.digitos']}" />
+							<p:ajax event="keyup" update="@(.sub-total)"
+								process="listaItensOrcamento" />
+						</pe:inputNumber>
+					</p:column>
+					<p:column headerText="#{msg['label.desconto']}" priority="5">
+						<pe:inputNumber maxValue="999" emptyValue="0"
+							value="#{item.desconto}"
+							rendered="#{item.produto.permiteDesconto}"
+							thousandSeparator="#{msg['moeda.separador.milhar']}" />
+						<p:outputLabel rendered="#{!item.produto.permiteDesconto}"
+							value="#{msg['label.na']}" />
+					</p:column>
+					<p:column headerText="#{msg['label.valor.unitario']}" priority="6"
+						sortBy="#{item.produto.preco}">
+						<p:outputLabel value="#{item.produto.preco}" />
+					</p:column>
+					<p:column headerText="#{msg['label.subtotal']}" priority="7"
+						sortBy="#{item.produto.preco}">
+						<p:outputLabel value="#{item.precoCalculadoComDesconto}"
+							styleClass="sub-total" />
 					</p:column>
 				</p:dataTable>
 			</div>
